@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AppFenixElcaminoAseguir</string>
+    <string name="title">Fenix Camino - Cita Aleatoria</string>
+    <string name="button_fetch">Obtener Cita</string>
+    <string name="error_fetch">Error al obtener la cita. Inténtalo de nuevo.</string>
+</resources>
