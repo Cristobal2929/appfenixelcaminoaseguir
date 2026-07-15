@@ -1,0 +1,44 @@
+========================================================================
+ CARPETA "space-huggingface" — AQUÍ VIVE LA VOZ
+========================================================================
+
+Estos dos archivos (app.py y fenix_core.py) NO van dentro de la app de
+Android. Van en tu Space de Hugging Face (cristobal299-fenix-aprendiz),
+que es donde de verdad se genera la voz.
+
+QUÉ CAMBIÉ
+----------
+1) Voz por defecto: "Guía Solemne (Hombre Profundo)" (es-ES-AlvaroNeural,
+   tono grave, ritmo pausado), en vez del eco de Teshuá o la voz de mujer
+   que tenías antes.
+
+2) FIX de concurrencia (varios usuarios a la vez): antes, la voz elegida
+   se guardaba en una variable global compartida por TODO el Space. Si dos
+   personas mandaban mensaje casi al mismo tiempo con voces distintas, una
+   podía terminar escuchando la voz que eligió la otra. Ahora cada mensaje
+   lleva su propia voz de principio a fin, sin tocar nada global — así que
+   ya no se pisan entre usuarios.
+
+3) Cola con más concurrencia: activé demo.queue(default_concurrency_limit=4)
+   para que hasta 4 mensajes se procesen en paralelo en vez de uno detrás
+   de otro. El historial de cada chat ya lo maneja Gradio por separado para
+   cada persona que entra (eso ya funcionaba bien, no hacía falta tocarlo).
+
+   Si con el tiempo notas que el Space se queda corto (mucha gente a la
+   vez, respuestas lentas), lo primero a revisar es: subir el número de
+   default_concurrency_limit SOLO si tienes hardware pago con más CPU/RAM,
+   y vigilar los límites de peticiones de Cerebras/NVIDIA/Edge-TTS.
+
+QUÉ HACER
+---------
+1) Entra a tu Space en huggingface.co (cristobal299-fenix-aprendiz).
+2) Pestaña "Files".
+3) Sube estos dos archivos, reemplazando los que ya están:
+   - app.py
+   - fenix_core.py
+4) El Space se reinicia solo. Cuando vuelva a encender, la app de
+   Android (que solo abre esta página) va a sonar directamente con la
+   voz de hombre solemne, sin que tengas que tocar nada del APK.
+
+La carpeta de Android (app/, build.gradle, etc.) sigue exactamente
+igual que antes — no necesita ningún cambio para esto.
