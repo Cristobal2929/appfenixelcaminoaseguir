@@ -7,4 +7,19 @@
     <string name="hint_api_key">Clave API de Cerebras</string>
     <string name="save">Guardar</string>
     <string name="accessibility_desc">Permite a Fénix leer la pantalla y realizar toques, escritura y desplazamientos por ti.</string>
+
+    <string name="chat_titulo">Fénix</string>
+    <string name="chat_hint">Escribe tu mensaje...</string>
+    <string name="chat_mic_desc">Entrada por voz</string>
+    <string name="chat_enviar">Enviar</string>
+
+    <string name="ajustes_titulo">Ajustes</string>
+    <string name="ajustes_explicacion">Introduce tu clave API de Cerebras para usar tu propia cuota. Si no tienes una, Fénix usará el pool compartido cuando esté disponible.</string>
+    <string name="ajustes_clave_hint">Clave API de Cerebras</string>
+    <string name="ajustes_guardar">Guardar</string>
+    <string name="ajustes_olvidar">Olvidar</string>
+    <string name="ajustes_enlace">Obtener clave gratis en cerebras.ai</string>
+    <string name="ajustes_estado_pool">Estado del pool: comprobando…</string>
+
+    <string name="splash_subtitulo">El camino a seguir</string>
 </resources>
