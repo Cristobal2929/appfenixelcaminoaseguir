@@ -12,8 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
         android:maxWidth="280dp"
-        android:padding="12dp"
+        android:padding="14dp"
         android:textColor="@color/teshua_texto"
-        android:textSize="15sp"/>
+        android:textSize="18sp"
+        android:lineSpacingExtra="5dp"
+        android:fontFamily="sans-serif-light"/>
 
 </LinearLayout>

@@ -82,17 +82,63 @@ object FenixApiClient {
         for (i in chatbot.length() - 1 downTo 0) {
             val item = chatbot.opt(i)
             if (item is JSONObject && item.optString("role") == "assistant") {
-                return item.optString("content", "(sin respuesta)")
+                return limpiarTexto(extraerTextoDeContenido(item.opt("content")))
             }
         }
 
         // Formato viejo de pares [usuario, fenix]
         val ultimo = chatbot.opt(chatbot.length() - 1)
         if (ultimo is JSONArray) {
-            return ultimo.optString(1, "(sin respuesta)")
+            return limpiarTexto(extraerTextoDeContenido(ultimo.opt(1)))
         }
 
         return "(sin respuesta)"
+    }
+
+    /**
+     * El campo "content" puede llegar como:
+     *  - String plano: "hola"
+     *  - Lista de bloques estilo OpenAI: [{"type":"text","text":"hola"}, ...]
+     *  - Un solo objeto: {"type":"text","text":"hola"}
+     * Aquí se extrae y concatena solo el texto real, sin volcar el JSON crudo.
+     */
+    private fun extraerTextoDeContenido(contenido: Any?): String {
+        return when (contenido) {
+            is String -> contenido
+            is JSONArray -> {
+                val partes = StringBuilder()
+                for (i in 0 until contenido.length()) {
+                    val bloque = contenido.opt(i)
+                    val texto = when (bloque) {
+                        is JSONObject -> bloque.optString("text", bloque.optString("content", ""))
+                        is String -> bloque
+                        else -> ""
+                    }
+                    if (texto.isNotBlank()) {
+                        if (partes.isNotEmpty()) partes.append("\n")
+                        partes.append(texto)
+                    }
+                }
+                partes.toString()
+            }
+            is JSONObject -> contenido.optString("text", contenido.optString("content", ""))
+            null -> ""
+            else -> contenido.toString()
+        }.ifBlank { "(sin respuesta)" }
+    }
+
+    /**
+     * Parche cliente: quita anotaciones internas de control que a veces el
+     * modelo "maestro" deja pegadas al final del texto, tipo
+     * "_(maestro: mal · tema espiritual)_". Lo ideal es que fenix_core.py
+     * nunca las incluya en el texto visible, pero mientras tanto se limpian
+     * aquí para que no lleguen al usuario.
+     */
+    private fun limpiarTexto(texto: String): String {
+        return texto
+            .replace(Regex("(?i)_?\\(\\s*maestro\\s*:[^)]*\\)_?"), "")
+            .trim()
+            .ifBlank { "(sin respuesta)" }
     }
 
     /** El componente gr.Audio llega como FileData: {"path":..,"url":..,"meta":{...}} o null. */
