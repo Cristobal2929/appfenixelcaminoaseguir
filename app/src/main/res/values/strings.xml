@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Fénix Móvil</string>
-    <string name="hint_message">Escribe tu mensaje...</string>
-    <string name="send">Enviar</string>
-    <string name="settings">Ajustes</string>
-    <string name="hint_api_key">Clave API de Cerebras</string>
-    <string name="save">Guardar</string>
-    <string name="accessibility_desc">Permite a Fénix leer la pantalla y realizar toques, escritura y desplazamientos por ti.</string>
+    <string name="app_name">Teshuá</string>
+    <string name="chat_titulo">Teshuá — Fénix en vivo</string>
+    <string name="chat_hint">Escribe tu mensaje…</string>
+    <string name="chat_enviar">Enviar</string>
+    <string name="chat_mic_desc">Hablar con Fénix</string>
+    <string name="ajustes_titulo">Ajustes</string>
+    <string name="ajustes_clave_label">Tu clave personal de Cerebras</string>
+    <string name="ajustes_clave_hint">csk-…</string>
+    <string name="ajustes_guardar">Guardar clave</string>
+    <string name="ajustes_olvidar">Olvidar clave</string>
+    <string name="ajustes_explicacion">Si pones tu propia clave de Cerebras, tus conversaciones usan tu cuota — no la del Space. La clave se guarda solo en este dispositivo, nunca se sube a ningún servidor nuestro. Si la dejas vacía, usarás el pool compartido de Fénix.</string>
+    <string name="ajustes_enlace">Conseguir mi clave gratis en cloud.cerebras.ai</string>
+    <string name="ajustes_estado_propia">Usando tu clave personal.</string>
+    <string name="ajustes_estado_pool">Usando el pool compartido del Space.</string>
+    <string name="splash_subtitulo">El retorno del alma a la fuente divina</string>
 </resources>
