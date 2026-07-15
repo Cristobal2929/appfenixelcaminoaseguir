@@ -1,11 +1,16 @@
 package com.fenix.aprendiz
 
 import android.Manifest
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.speech.RecognizerIntent
 import android.view.View
 import android.widget.Button
@@ -29,6 +34,13 @@ import java.util.Locale
  * Voz completa: 🎤 pide permiso, abre el reconocedor del sistema y envía
  * el texto reconocido; cada respuesta se reproduce con el audio que genera
  * el Space (misma voz/personalidad configurada allá).
+ *
+ * Persistencia: el historial (tanto el formato Gradio que se manda al
+ * Space como las burbujas ya pintadas) se guarda en este dispositivo
+ * (Prefs) tras cada mensaje, así que cerrar y reabrir la app no pierde la
+ * conversación. El botón "Reiniciar conversación" borra ese historial y
+ * empieza de cero. El subtítulo muestra la "lección"/tema que el maestro
+ * interno detectó en el último turno, cuando el Space la incluye.
  */
 class ChatActivity : AppCompatActivity() {
 
@@ -43,6 +55,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var panelAjustes: View
     private lateinit var estadoClave: TextView
     private lateinit var btnMic: ImageButton
+    private lateinit var tvSubtitulo: TextView
 
     private val historialGradio = JSONArray()
     private var mediaPlayer: MediaPlayer? = null
@@ -76,15 +89,28 @@ class ChatActivity : AppCompatActivity() {
         panelAjustes = findViewById(R.id.panelAjustes)
         estadoClave = findViewById(R.id.estadoClave)
         btnMic = findViewById(R.id.btnMic)
+        tvSubtitulo = findViewById(R.id.tvSubtitulo)
 
-        adapter = ChatAdapter(mutableListOf())
+        // Carga lo que ya estaba guardado en este dispositivo (si lo hay).
+        adapter = ChatAdapter(Prefs.leerMensajesUI(this))
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = adapter
+
+        val historialGuardado = Prefs.leerHistorialGradio(this)
+        for (i in 0 until historialGuardado.length()) historialGradio.put(historialGuardado.get(i))
+
+        actualizarSubtitulo(Prefs.leerUltimaLeccion(this))
+
+        if (adapter.itemCount > 0) rv.scrollToPosition(adapter.itemCount - 1)
 
         findViewById<ImageButton>(R.id.btnCerrarChat).setOnClickListener { cerrar() }
 
         findViewById<ImageButton>(R.id.btnAjustes).setOnClickListener {
             alternarPanelAjustes()
+        }
+
+        findViewById<ImageButton>(R.id.btnReiniciar).setOnClickListener {
+            confirmarReinicioConversacion()
         }
 
         findViewById<TextView>(R.id.linkCerebras).setOnClickListener {
@@ -130,6 +156,26 @@ class ChatActivity : AppCompatActivity() {
         cerrar()
     }
 
+    private fun confirmarReinicioConversacion() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.chat_reiniciar_confirmar_titulo)
+            .setMessage(R.string.chat_reiniciar_confirmar_mensaje)
+            .setPositiveButton(R.string.chat_reiniciar_confirmar_boton) { dialog, _ ->
+                reiniciarConversacion()
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.chat_reiniciar_cancelar_boton) { dialog, _ -> dialog.dismiss() }
+            .show()
+    }
+
+    private fun reiniciarConversacion() {
+        adapter.limpiar()
+        while (historialGradio.length() > 0) historialGradio.remove(0)
+        Prefs.reiniciarConversacion(this)
+        actualizarSubtitulo(null)
+        Toast.makeText(this, R.string.chat_reiniciar_hecho, Toast.LENGTH_SHORT).show()
+    }
+
     private fun onMicPulsado() {
         val tienePermiso = ContextCompat.checkSelfPermission(
             this, Manifest.permission.RECORD_AUDIO
@@ -157,6 +203,14 @@ class ChatActivity : AppCompatActivity() {
             getString(R.string.ajustes_estado_propia) else getString(R.string.ajustes_estado_pool)
     }
 
+    /** Muestra la última lección/tema detectado en el subtítulo, o el texto por defecto si no hay ninguna. */
+    private fun actualizarSubtitulo(leccion: String?) {
+        tvSubtitulo.text = if (leccion.isNullOrBlank())
+            getString(R.string.chat_subtitulo)
+        else
+            getString(R.string.chat_subtitulo_leccion, leccion)
+    }
+
     private fun enviar() {
         val texto = inputMensaje.text.toString().trim()
         if (texto.isEmpty()) return
@@ -165,17 +219,28 @@ class ChatActivity : AppCompatActivity() {
         rv.scrollToPosition(adapter.itemCount - 1)
         progress.visibility = View.VISIBLE
 
+        // Se guarda ya el mensaje del usuario, por si la app se cierra antes de recibir respuesta.
+        Prefs.guardarMensajesUI(this, adapter.obtenerTodos())
+
         val clave = Prefs.leerClaveCerebras(this)
         FenixApiClient.enviarMensaje(
             mensaje = texto,
             historialGradio = historialGradio,
             claveUsuario = clave,
-            onResultado = { respuesta, historialActualizado, audioUrl ->
+            onResultado = { respuesta, historialActualizado, audioUrl, categoria ->
                 runOnUiThread {
                     progress.visibility = View.GONE
                     adapter.agregar(Mensaje(respuesta, esUsuario = false))
                     rv.scrollToPosition(adapter.itemCount - 1)
                     sincronizarHistorial(historialActualizado)
+                    actualizarSubtitulo(categoria)
+                    vibrarRespuesta()
+
+                    // Guarda tras cada mensaje: historial Gradio, burbujas UI y lección detectada.
+                    Prefs.guardarHistorialGradio(this, historialGradio)
+                    Prefs.guardarMensajesUI(this, adapter.obtenerTodos())
+                    Prefs.guardarUltimaLeccion(this, categoria)
+
                     if (audioUrl != null) reproducirAudio(audioUrl)
                 }
             },
@@ -186,6 +251,21 @@ class ChatActivity : AppCompatActivity() {
                 }
             }
         )
+    }
+
+    /** Vibración corta al llegar la respuesta de Fénix (avisa aunque no se esté mirando la pantalla). */
+    private fun vibrarRespuesta() {
+        try {
+            val vibrador = getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator ?: return
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrador.vibrate(VibrationEffect.createOneShot(60, VibrationEffect.DEFAULT_AMPLITUDE))
+            } else {
+                @Suppress("DEPRECATION")
+                vibrador.vibrate(60)
+            }
+        } catch (e: Exception) {
+            // Si el dispositivo no soporta vibración, no interrumpimos el chat.
+        }
     }
 
     private fun reproducirAudio(url: String) {

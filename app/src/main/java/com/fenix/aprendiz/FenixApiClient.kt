@@ -45,13 +45,16 @@ object FenixApiClient {
      *  - historialActualizado: el array "chatbot" tal cual lo devolvió el Space
      *  - audioUrl: URL reproducible del audio_respuesta generado (o null si
      *    el Space no devolvió audio para este turno)
+     *  - categoria: la "lección"/tema que el maestro interno detectó para este
+     *    turno (p.ej. "tema espiritual"), o null si el Space no incluyó la
+     *    anotación "_(maestro: veredicto · categoria)_" en la respuesta.
      */
     fun enviarMensaje(
         mensaje: String,
         historialGradio: JSONArray,
         claveUsuario: String?,
         vozSeleccionada: String = "Anciano Sabio (Hombre Místico)",
-        onResultado: (respuestaTexto: String, historialActualizado: JSONArray, audioUrl: String?) -> Unit,
+        onResultado: (respuestaTexto: String, historialActualizado: JSONArray, audioUrl: String?, categoria: String?) -> Unit,
         onError: (String) -> Unit
     ) {
         Thread {
@@ -64,35 +67,49 @@ object FenixApiClient {
                 }
 
                 val chatbot = resultado.optJSONArray(0) ?: JSONArray()
-                val ultimaRespuesta = extraerUltimaRespuesta(chatbot)
+                val crudo = extraerUltimaRespuestaCruda(chatbot)
+                val categoria = extraerCategoria(crudo)
+                val ultimaRespuesta = limpiarTexto(crudo)
                 val audioUrl = extraerAudioUrl(resultado.opt(2))
 
-                onResultado(ultimaRespuesta, chatbot, audioUrl)
+                onResultado(ultimaRespuesta, chatbot, audioUrl, categoria)
             } catch (e: Exception) {
                 onError(e.message ?: "Error de conexión con el Space")
             }
         }.start()
     }
 
-    /** Soporta formato "messages" ({"role","content"}) y el viejo de pares [usuario, fenix]. */
-    private fun extraerUltimaRespuesta(chatbot: JSONArray): String {
+    /** Soporta formato "messages" ({"role","content"}) y el viejo de pares [usuario, fenix]. Sin limpiar. */
+    private fun extraerUltimaRespuestaCruda(chatbot: JSONArray): String {
         if (chatbot.length() == 0) return "(sin respuesta)"
 
         // Formato "messages": recorre desde el final buscando el último role=assistant
         for (i in chatbot.length() - 1 downTo 0) {
             val item = chatbot.opt(i)
             if (item is JSONObject && item.optString("role") == "assistant") {
-                return limpiarTexto(extraerTextoDeContenido(item.opt("content")))
+                return extraerTextoDeContenido(item.opt("content"))
             }
         }
 
         // Formato viejo de pares [usuario, fenix]
         val ultimo = chatbot.opt(chatbot.length() - 1)
         if (ultimo is JSONArray) {
-            return limpiarTexto(extraerTextoDeContenido(ultimo.opt(1)))
+            return extraerTextoDeContenido(ultimo.opt(1))
         }
 
         return "(sin respuesta)"
+    }
+
+    /**
+     * Lee la anotación interna "_(maestro: veredicto · categoria)_" que
+     * fenix_core.py deja pegada al final de la respuesta y devuelve solo la
+     * categoría (la "lección"/tema de este turno), para mostrarla en el
+     * subtítulo del chat. Devuelve null si la respuesta no trae esa anotación.
+     */
+    private fun extraerCategoria(textoCrudo: String): String? {
+        val m = Regex("(?i)_?\\(\\s*maestro\\s*:\\s*[^·)]+·\\s*([^)]+)\\)_?").find(textoCrudo)
+        val categoria = m?.groupValues?.getOrNull(1)?.trim()
+        return if (categoria.isNullOrBlank()) null else categoria
     }
 
     /**

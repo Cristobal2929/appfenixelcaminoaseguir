@@ -46,8 +46,25 @@ class ChatAdapter(private val mensajes: MutableList<Mensaje>) :
 
     override fun getItemCount() = mensajes.size
 
+    fun obtenerTodos(): List<Mensaje> = mensajes
+
     fun agregar(m: Mensaje) {
         mensajes.add(m)
         notifyItemInserted(mensajes.size - 1)
+    }
+
+    /** Carga mensajes ya guardados (al abrir el chat) sin re-animar burbujas viejas. */
+    fun cargarGuardados(guardados: List<Mensaje>) {
+        mensajes.clear()
+        mensajes.addAll(guardados)
+        ultimaPosicionAnimada = mensajes.size - 1
+        notifyDataSetChanged()
+    }
+
+    /** Vacía el chat (usado por "Reiniciar conversación"). */
+    fun limpiar() {
+        mensajes.clear()
+        ultimaPosicionAnimada = -1
+        notifyDataSetChanged()
     }
 }
