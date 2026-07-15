@@ -1,34 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="20dp"
+    android:background="#F8F2E4">
+
+    <TextView
+        android:id="@+id/tvTeshua"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TESHUÁ"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:textColor="#8B6B2E"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvStar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="✡"
+        android:textSize="52sp"
+        android:textColor="#0D3B66"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTeshua"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/tvTitle"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/title"
-        android:textSize="24sp"
-        android:textColor="@color/black"
+        android:text="FÉNIX"
+        android:textSize="34sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="#3E2F1C"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tvStar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="El Camino del Retorno"
+        android:textSize="18sp"
+        android:textColor="#555555"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
         android:id="@+id/btnFetch"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:text="@string/button_fetch"
-        android:backgroundTint="@color/purple_500"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        android:text="COMENZAR EL CAMINO"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:textSize="17sp"
+        android:backgroundTint="#8B6B2E"
+        android:layout_marginTop="28dp"
+        app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvIntro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Pulsa el botón SHALOM y di:\n\nSoy (tu nombre), nací el (tu fecha de nacimiento) y quiero comenzar el Camino de las 100 Lecciones de Teshuvá.\n\nFénix recordará tu progreso y te acompañará durante todo el recorrido."
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/btnFetch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -36,19 +90,19 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/btnFetch"
+        android:layout_marginTop="18dp"
+        app:layout_constraintTop_toBottomOf="@id/tvIntro"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvQuotes"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="18dp"
         app:layout_constraintTop_toBottomOf="@id/progressBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="12dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
