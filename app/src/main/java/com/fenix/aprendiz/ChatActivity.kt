@@ -39,7 +39,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var rv: RecyclerView
     private lateinit var adapter: ChatAdapter
     private lateinit var inputMensaje: EditText
-    private lateinit var progress: ProgressBar
+    private lateinit var progress: View
     private lateinit var panelAjustes: View
     private lateinit var estadoClave: TextView
     private lateinit var btnMic: ImageButton
