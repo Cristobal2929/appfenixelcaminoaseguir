@@ -2,6 +2,7 @@ package com.fenix.aprendiz
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -9,6 +10,9 @@ data class Mensaje(val texto: String, val esUsuario: Boolean)
 
 class ChatAdapter(private val mensajes: MutableList<Mensaje>) :
     RecyclerView.Adapter<ChatAdapter.VH>() {
+
+    // Evita re-animar burbujas ya mostradas al hacer scroll hacia arriba/abajo.
+    private var ultimaPosicionAnimada = -1
 
     class VH(val root: android.view.View) : RecyclerView.ViewHolder(root) {
         val tv: TextView = root.findViewById(R.id.tvMensaje)
@@ -29,6 +33,14 @@ class ChatAdapter(private val mensajes: MutableList<Mensaje>) :
         } else {
             root.gravity = android.view.Gravity.START
             holder.tv.setBackgroundResource(R.drawable.bg_burbuja_fenix)
+        }
+
+        if (position > ultimaPosicionAnimada) {
+            val anim = AnimationUtils.loadAnimation(holder.root.context, R.anim.burbuja_entrada)
+            holder.root.startAnimation(anim)
+            ultimaPosicionAnimada = position
+        } else {
+            holder.root.clearAnimation()
         }
     }
 

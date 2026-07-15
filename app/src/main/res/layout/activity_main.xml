@@ -1,61 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    Fase Home (rediseño): pantalla principal 100% nativa.
+
+    Antes esta pantalla era un WebView que mostraba el Space completo — eso
+    exponía el Space de Pedro directamente al usuario. Ahora es una pantalla
+    propia, con la identidad Teshuá (espiral dorada, letras hebreas, paleta
+    negro/dorado), y un único camino hacia adelante: el botón "Hablar con
+    Fénix", que abre ChatActivity (texto + voz, nativo, sin mostrar nunca
+    el Space). El Space sigue siendo el cerebro detrás de cámaras, pero
+    nadie lo ve ni lo abre.
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:background="@color/teshua_fondo">
+
+    <!-- Letras hebreas decorativas, muy tenues, de fondo -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="36dp"
+        android:text="תשובה"
+        android:textColor="#1FD4AF37"
+        android:textSize="64sp"
+        android:textStyle="bold"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="36dp">
+
+        <FrameLayout
+            android:id="@+id/emblema"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:background="@drawable/bg_emblema_home">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_teshua_spiral"
+                android:contentDescription="@string/app_name"/>
+        </FrameLayout>
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginTop="26dp"
             android:text="@string/app_name"
-            android:textSize="20sp"
+            android:textColor="@color/teshua_dorado"
+            android:textSize="36sp"
             android:textStyle="bold"
-            android:gravity="center_vertical"/>
+            android:letterSpacing="0.08"/>
 
-        <Button
-            android:id="@+id/buttonAccessibility"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🖐"/>
+            android:layout_marginTop="6dp"
+            android:text="@string/splash_subtitulo"
+            android:textColor="@color/teshua_texto_apagado"
+            android:textSize="14sp"
+            android:gravity="center"/>
 
-        <Button
-            android:id="@+id/buttonSettings"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⚙"/>
+            android:layout_marginTop="34dp"
+            android:text="@string/home_bienvenida"
+            android:textColor="@color/teshua_texto"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"/>
+
     </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/editTextMessage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/hint_message"
-            android:inputType="textMultiLine"
-            android:maxLines="4"/>
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="36dp"
+        android:paddingBottom="48dp">
 
         <Button
-            android:id="@+id/buttonSend"
+            android:id="@+id/btnHablarFenix"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_boton_hablar"
+            android:text="@string/home_boton_hablar"
+            android:textAllCaps="false"
+            android:textColor="@color/teshua_texto"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:elevation="4dp"/>
+
+        <TextView
+            android:id="@+id/btnAjustesHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/send"/>
+            android:layout_marginTop="18dp"
+            android:padding="8dp"
+            android:text="@string/home_ajustes"
+            android:textColor="@color/teshua_texto_apagado"
+            android:textSize="13sp"/>
+
     </LinearLayout>
-</LinearLayout>
+
+</FrameLayout>
