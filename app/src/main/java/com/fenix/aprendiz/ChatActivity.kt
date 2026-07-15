@@ -10,6 +10,7 @@ import android.speech.RecognizerIntent
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -22,17 +23,18 @@ import org.json.JSONArray
 import java.util.Locale
 
 /**
- * Chat en vivo con Fénix Aprendiz, accesible desde el botón flotante Teshuá.
+ * Chat en vivo con Fénix Aprendiz — la única pantalla de conversación.
+ * Nunca muestra el Space: todo pasa por FenixApiClient (API de Gradio).
  *
- * FASE D: ahora soporta voz completa dentro del propio chat flotante:
- *  - Botón 🎤 -> pide permiso de micrófono si falta, abre el reconocedor de
- *    voz del sistema, y al terminar envía el texto reconocido directo al
- *    Space (igual que si lo hubieras escrito).
- *  - Cada respuesta de Fénix, si el Space devolvió audio_respuesta, se
- *    reproduce automáticamente con MediaPlayer (misma voz/personalidad que
- *    configuraste en el Space, ej. "Voz de Teshuá").
+ * Voz completa: 🎤 pide permiso, abre el reconocedor del sistema y envía
+ * el texto reconocido; cada respuesta se reproduce con el audio que genera
+ * el Space (misma voz/personalidad configurada allá).
  */
 class ChatActivity : AppCompatActivity() {
+
+    companion object {
+        const val EXTRA_ABRIR_AJUSTES = "abrir_ajustes"
+    }
 
     private lateinit var rv: RecyclerView
     private lateinit var adapter: ChatAdapter
@@ -40,25 +42,18 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var progress: ProgressBar
     private lateinit var panelAjustes: View
     private lateinit var estadoClave: TextView
-    private lateinit var btnMic: TextView
+    private lateinit var btnMic: ImageButton
 
-    // Historial en el formato que espera Gradio (lista de mensajes {"role","content"})
     private val historialGradio = JSONArray()
-
     private var mediaPlayer: MediaPlayer? = null
 
-    // --- Permiso de micrófono ---
     private val pedirPermisoMic = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { concedido ->
-        if (concedido) {
-            lanzarReconocedorVoz()
-        } else {
-            Toast.makeText(this, "Necesito el micrófono para escucharte.", Toast.LENGTH_SHORT).show()
-        }
+        if (concedido) lanzarReconocedorVoz()
+        else Toast.makeText(this, "Necesito el micrófono para escucharte.", Toast.LENGTH_SHORT).show()
     }
 
-    // --- Reconocedor de voz del sistema ---
     private val reconocedorVoz = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -86,10 +81,10 @@ class ChatActivity : AppCompatActivity() {
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = adapter
 
-        findViewById<TextView>(R.id.btnCerrarChat).setOnClickListener { finish() }
+        findViewById<ImageButton>(R.id.btnCerrarChat).setOnClickListener { cerrar() }
 
-        findViewById<TextView>(R.id.btnAjustes).setOnClickListener {
-            panelAjustes.visibility = if (panelAjustes.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        findViewById<ImageButton>(R.id.btnAjustes).setOnClickListener {
+            alternarPanelAjustes()
         }
 
         findViewById<TextView>(R.id.linkCerebras).setOnClickListener {
@@ -111,11 +106,28 @@ class ChatActivity : AppCompatActivity() {
             actualizarEstadoClave()
         }
 
-        findViewById<Button>(R.id.btnEnviar).setOnClickListener { enviar() }
+        findViewById<ImageButton>(R.id.btnEnviar).setOnClickListener { enviar() }
 
         btnMic.setOnClickListener { onMicPulsado() }
 
         actualizarEstadoClave()
+
+        if (intent.getBooleanExtra(EXTRA_ABRIR_AJUSTES, false)) {
+            panelAjustes.visibility = View.VISIBLE
+        }
+    }
+
+    private fun alternarPanelAjustes() {
+        panelAjustes.visibility = if (panelAjustes.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+    }
+
+    private fun cerrar() {
+        finish()
+        overridePendingTransition(R.anim.fade_in, R.anim.slide_down_out)
+    }
+
+    override fun onBackPressed() {
+        cerrar()
     }
 
     private fun onMicPulsado() {
@@ -123,11 +135,8 @@ class ChatActivity : AppCompatActivity() {
             this, Manifest.permission.RECORD_AUDIO
         ) == PackageManager.PERMISSION_GRANTED
 
-        if (tienePermiso) {
-            lanzarReconocedorVoz()
-        } else {
-            pedirPermisoMic.launch(Manifest.permission.RECORD_AUDIO)
-        }
+        if (tienePermiso) lanzarReconocedorVoz()
+        else pedirPermisoMic.launch(Manifest.permission.RECORD_AUDIO)
     }
 
     private fun lanzarReconocedorVoz() {
@@ -190,7 +199,7 @@ class ChatActivity : AppCompatActivity() {
                 prepareAsync()
             }
         } catch (e: Exception) {
-            // Si falla la reproducción, el texto ya se mostró igual; no interrumpimos el chat.
+            // El texto ya se mostró; si falla el audio, no interrumpimos el chat.
         }
     }
 

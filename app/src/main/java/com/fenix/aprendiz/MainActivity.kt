@@ -1,184 +1,62 @@
 package com.fenix.aprendiz
 
-import android.annotation.SuppressLint
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
-import android.webkit.PermissionRequest
-import android.webkit.ValueCallback
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.widget.FrameLayout
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import kotlin.math.abs
 
 /**
- * Fénix Aprendiz / Teshuá — la app.
+ * Fénix Aprendiz / Teshuá — pantalla de inicio.
  *
- * Sigue sin llevar ningún cerebro ni base de datos dentro: el WebView abre tu
- * Space de Hugging Face completo, con voz e IA. Encima flota el botón Teshuá:
- *  - toque corto -> abre el chat en vivo nativo (ChatActivity), solo texto.
- *  - arrastrarlo hasta la zona roja inferior -> cierra la app.
+ * REDISEÑO IMPORTANTE: esta pantalla ya NO carga el Space en un WebView.
+ * Antes mostraba directamente la página del Space (con todo el contenido
+ * personal de Pedro) a pantalla completa, lo cual no era la intención.
  *
- * Si algún día cambias el nombre del Space, cambia URL_ESPACIO y recompila.
+ * Ahora es una pantalla 100% nativa con identidad propia (espiral Teshuá,
+ * letras hebreas de fondo, paleta negro/dorado). El único camino hacia
+ * adelante es el botón "Hablar con Fénix", que abre ChatActivity: ahí es
+ * donde ocurre toda la conversación (texto y voz) hablando con el Space
+ * por API, sin que el usuario vea jamás la página web del Space.
  */
 class MainActivity : AppCompatActivity() {
 
-    private val URL_ESPACIO = "https://cristobal299-fenix-aprendiz.hf.space"
-
-    private lateinit var web: WebView
-    private lateinit var fab: View
-    private lateinit var closeZone: View
-
-    private var fileCallback: ValueCallback<Array<Uri>>? = null
-    private val selectorArchivo = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        val cb = fileCallback ?: return@registerForActivityResult
-        cb.onReceiveValue(
-            WebChromeClient.FileChooserParams.parseResult(result.resultCode, result.data)
-        )
-        fileCallback = null
-    }
-
-    @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        web = findViewById(R.id.webView)
-        fab = findViewById(R.id.fabTeshua)
-        closeZone = findViewById(R.id.closeZone)
+        val emblema = findViewById<android.view.View>(R.id.emblema)
+        respirarEmblema(emblema)
 
-        web.settings.apply {
-            javaScriptEnabled = true
-            domStorageEnabled = true
-            mediaPlaybackRequiresUserGesture = false
+        findViewById<android.widget.Button>(R.id.btnHablarFenix).setOnClickListener {
+            abrirChat()
         }
 
-        web.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(
-                view: WebView,
-                request: WebResourceRequest
-            ): Boolean = false
-        }
-
-        web.webChromeClient = object : WebChromeClient() {
-            override fun onShowFileChooser(
-                webView: WebView,
-                filePathCallback: ValueCallback<Array<Uri>>,
-                params: FileChooserParams
-            ): Boolean {
-                fileCallback = filePathCallback
-                return try {
-                    selectorArchivo.launch(params.createIntent())
-                    true
-                } catch (e: Exception) {
-                    fileCallback = null
-                    false
-                }
-            }
-
-            override fun onPermissionRequest(request: PermissionRequest) {
-                request.grant(request.resources)
-            }
-        }
-
-        if (savedInstanceState != null) {
-            web.restoreState(savedInstanceState)
-        } else {
-            web.loadUrl(URL_ESPACIO)
-        }
-
-        configurarBotonFlotante()
-    }
-
-    /** Botón Teshuá: semi-transparente en reposo, arrastrable, tap corto abre el chat. */
-    private fun configurarBotonFlotante() {
-        var dX = 0f
-        var dY = 0f
-        var startX = 0f
-        var startY = 0f
-        var arrastrando = false
-        val umbralClick = 12f
-
-        fab.alpha = 0.35f
-
-        fab.setOnTouchListener { v, event ->
-            val parent = v.parent as ViewGroup
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    dX = v.x - event.rawX
-                    dY = v.y - event.rawY
-                    startX = event.rawX
-                    startY = event.rawY
-                    arrastrando = false
-                    v.animate().alpha(1f).setDuration(120).start()
-                    true
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    val movX = abs(event.rawX - startX)
-                    val movY = abs(event.rawY - startY)
-                    if (movX > umbralClick || movY > umbralClick) {
-                        arrastrando = true
-                        closeZone.visibility = View.VISIBLE
-                        var nuevaX = event.rawX + dX
-                        var nuevaY = event.rawY + dY
-                        nuevaX = nuevaX.coerceIn(0f, (parent.width - v.width).toFloat())
-                        nuevaY = nuevaY.coerceIn(0f, (parent.height - v.height).toFloat())
-                        v.x = nuevaX
-                        v.y = nuevaY
-
-                        if (estaSobreZonaCierre(v)) {
-                            closeZone.scaleX = 1.25f
-                            closeZone.scaleY = 1.25f
-                        } else {
-                            closeZone.scaleX = 1f
-                            closeZone.scaleY = 1f
-                        }
-                    }
-                    true
-                }
-                MotionEvent.ACTION_UP -> {
-                    closeZone.visibility = View.GONE
-                    if (!arrastrando) {
-                        // Toque corto -> abrir chat en vivo
-                        startActivity(Intent(this, ChatActivity::class.java))
-                        v.animate().alpha(0.35f).setDuration(200).start()
-                    } else if (estaSobreZonaCierre(v)) {
-                        finishAndRemoveTask()
-                    } else {
-                        v.animate().alpha(0.35f).setDuration(400).start()
-                    }
-                    true
-                }
-                else -> false
-            }
+        findViewById<android.widget.TextView>(R.id.btnAjustesHome).setOnClickListener {
+            abrirChat(irDirectoAAjustes = true)
         }
     }
 
-    private fun estaSobreZonaCierre(fabView: View): Boolean {
-        val fabCentroX = fabView.x + fabView.width / 2
-        val fabCentroY = fabView.y + fabView.height / 2
-        val czX = closeZone.x + closeZone.width / 2
-        val czY = closeZone.y + closeZone.height / 2
-        val distancia = Math.hypot((fabCentroX - czX).toDouble(), (fabCentroY - czY).toDouble())
-        return distancia < closeZone.width
+    private fun abrirChat(irDirectoAAjustes: Boolean = false) {
+        val intent = Intent(this, ChatActivity::class.java)
+        if (irDirectoAAjustes) intent.putExtra(ChatActivity.EXTRA_ABRIR_AJUSTES, true)
+        startActivity(intent)
+        overridePendingTransition(R.anim.slide_up_in, R.anim.fade_out)
     }
 
-    @Suppress("DEPRECATION")
-    override fun onBackPressed() {
-        if (web.canGoBack()) web.goBack() else super.onBackPressed()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        web.saveState(outState)
+    /** Respiración sutil y continua del emblema: nunca es un WebView, pero tampoco está muerto. */
+    private fun respirarEmblema(view: android.view.View) {
+        val escalaX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.06f).apply {
+            duration = 1800
+            repeatMode = ValueAnimator.REVERSE
+            repeatCount = ValueAnimator.INFINITE
+        }
+        val escalaY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.06f).apply {
+            duration = 1800
+            repeatMode = ValueAnimator.REVERSE
+            repeatCount = ValueAnimator.INFINITE
+        }
+        escalaX.start()
+        escalaY.start()
     }
 }
