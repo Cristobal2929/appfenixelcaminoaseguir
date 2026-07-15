@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/teshua_fondo">
+
+    <!-- Barra superior -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="14dp"
+        android:background="@color/teshua_fondo_panel">
+
+        <TextView
+            android:id="@+id/btnCerrarChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="←"
+            android:textColor="@color/teshua_dorado"
+            android:textSize="22sp"
+            android:padding="6dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:text="@string/chat_titulo"
+            android:textColor="@color/teshua_texto"
+            android:textStyle="bold"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:id="@+id/btnAjustes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⚙"
+            android:textColor="@color/teshua_dorado"
+            android:textSize="20sp"
+            android:padding="6dp"/>
+    </LinearLayout>
+
+    <!-- Panel de ajustes (oculto por defecto) -->
+    <LinearLayout
+        android:id="@+id/panelAjustes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@color/teshua_fondo_panel"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ajustes_titulo"
+            android:textColor="@color/teshua_dorado"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/ajustes_explicacion"
+            android:textColor="@color/teshua_texto_apagado"
+            android:textSize="13sp"/>
+
+        <EditText
+            android:id="@+id/inputClaveCerebras"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/ajustes_clave_hint"
+            android:inputType="textPassword"
+            android:textColor="@color/teshua_texto"
+            android:textColorHint="@color/teshua_texto_apagado"
+            android:backgroundTint="@color/teshua_dorado"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <Button
+                android:id="@+id/btnGuardarClave"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/ajustes_guardar"
+                android:backgroundTint="@color/teshua_dorado"
+                android:textColor="@color/black"/>
+
+            <Button
+                android:id="@+id/btnOlvidarClave"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="@string/ajustes_olvidar"
+                android:backgroundTint="@color/teshua_burbuja_usuario"
+                android:textColor="@color/teshua_texto"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/linkCerebras"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/ajustes_enlace"
+            android:textColor="@color/teshua_rojizo"
+            android:textStyle="bold"
+            android:autoLink="web"/>
+
+        <TextView
+            android:id="@+id/estadoClave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/ajustes_estado_pool"
+            android:textColor="@color/teshua_texto_apagado"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
+    <!-- Lista de mensajes -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvChat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingHorizontal="10dp"
+        android:clipToPadding="false"/>
+
+    <ProgressBar
+        android:id="@+id/progressChat"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="6dp"
+        android:visibility="gone"
+        android:indeterminateTint="@color/teshua_dorado"/>
+
+    <!-- Entrada de texto -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:background="@color/teshua_fondo_panel">
+
+        <EditText
+            android:id="@+id/inputMensaje"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/chat_hint"
+            android:textColor="@color/teshua_texto"
+            android:textColorHint="@color/teshua_texto_apagado"
+            android:backgroundTint="@color/teshua_dorado"
+            android:maxLines="4"/>
+
+        <Button
+            android:id="@+id/btnEnviar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/chat_enviar"
+            android:backgroundTint="@color/teshua_rojizo"
+            android:textColor="@color/teshua_texto"/>
+    </LinearLayout>
+
+</LinearLayout>

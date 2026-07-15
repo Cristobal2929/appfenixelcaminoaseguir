@@ -10,14 +10,25 @@
         android:theme="@style/Theme.FenixAprendiz">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true"
-            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout">
+            android:theme="@style/Theme.FenixAprendiz">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout"/>
+
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FenixAprendiz"
+            android:windowSoftInputMode="adjustResize"/>
 
     </application>
 </manifest>
