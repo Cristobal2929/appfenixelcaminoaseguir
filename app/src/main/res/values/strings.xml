@@ -2,9 +2,10 @@
 <resources>
     <string name="app_name">Teshuá</string>
 
-    <string name="home_bienvenida">Escríbele o háblale a Fénix. Tu conversación queda aquí, en tu propia app.</string>
+    <string name="home_bienvenida">Dile tu nombre a Fénix y cuéntale que quieres empezar el Camino de la Teshuá. Él te irá guiando, lección a lección, a través de las 100 lecciones del retorno del alma.</string>
     <string name="home_boton_hablar">Hablar con Fénix</string>
     <string name="home_ajustes">Ajustes</string>
+    <string name="home_burbuja">Activar Fénix flotante 🔮</string>
 
     <string name="chat_titulo">Teshuá</string>
     <string name="chat_subtitulo">Fénix en vivo</string>
