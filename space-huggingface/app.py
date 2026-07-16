@@ -182,6 +182,17 @@ def _segundos_hasta_manana() -> int:
     return max(60, int((manana - ahora).total_seconds()))
 
 
+def identidad_login_ui(nombre, pin):
+    """Envoltorio para el Jardín (Templo de Gratitud, Círculo de Historias,
+    Río de Conversación): expone entrar_o_registrar_identidad como endpoint
+    de API propio ('identidad_login'), separado por completo del chat
+    ('responder'). Devuelve un JSON en texto plano para que el cliente
+    Android lo parsee fácil, sin depender de un formato de salida nuevo."""
+    import json as _json
+    resultado = fenix_core.entrar_o_registrar_identidad(nombre, pin)
+    return _json.dumps(resultado, ensure_ascii=False)
+
+
 def responder(mensaje, historial, voz_seleccionada):
     if not mensaje.strip():
         return historial, "", None, cargar_conversaciones(limite=300)
@@ -596,6 +607,23 @@ with gr.Blocks(title="Fénix Aprendiz") as demo:
 
             btn_guardar_claves = gr.Button("💾 Aplicar y Registrar Claves", variant="primary")
             estado_claves = gr.Markdown("_Pool de claves activo y listo._")
+
+    # --- Endpoint de API "identidad_login" para el Jardín (Templo de
+    # Gratitud, Círculo de Historias, Río de Conversación) ---
+    # Componentes ocultos: no aparecen en la interfaz visible del chat, solo
+    # existen para que Android pueda llamar a gradio_api/call/identidad_login.
+    with gr.Row(visible=False):
+        identidad_nombre_in = gr.Textbox(label="nombre")
+        identidad_pin_in = gr.Textbox(label="pin")
+        identidad_resultado_out = gr.Textbox(label="resultado_json")
+        identidad_btn = gr.Button("identidad_login")
+
+    identidad_btn.click(
+        fn=identidad_login_ui,
+        inputs=[identidad_nombre_in, identidad_pin_in],
+        outputs=[identidad_resultado_out],
+        api_name="identidad_login",
+    )
 
     # Gestión de Eventos
     txt.submit(

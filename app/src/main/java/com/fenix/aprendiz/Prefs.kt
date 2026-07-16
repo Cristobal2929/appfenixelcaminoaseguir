@@ -22,6 +22,7 @@ object Prefs {
     private const val CLAVE_HISTORIAL_GRADIO = "historial_gradio"
     private const val CLAVE_MENSAJES_UI = "mensajes_ui"
     private const val CLAVE_ULTIMA_LECCION = "ultima_leccion"
+    private const val CLAVE_JARDIN_NOMBRE = "jardin_nombre"
 
     fun guardarClaveCerebras(ctx: Context, clave: String) {
         ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)
@@ -96,5 +97,27 @@ object Prefs {
             .remove(CLAVE_MENSAJES_UI)
             .remove(CLAVE_ULTIMA_LECCION)
             .apply()
+    }
+
+    /**
+     * Identidad ligera del Jardín (Templo de Gratitud, Círculo de Historias,
+     * Río de Conversación). Solo se guarda el nombre en este dispositivo: el
+     * PIN nunca se almacena localmente, solo se usa una vez para validarse
+     * contra el Space (login) o para recuperar el perfil en un celular nuevo.
+     */
+    fun guardarNombreJardin(ctx: Context, nombre: String) {
+        ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)
+            .edit().putString(CLAVE_JARDIN_NOMBRE, nombre).apply()
+    }
+
+    fun leerNombreJardin(ctx: Context): String? {
+        val v = ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)
+            .getString(CLAVE_JARDIN_NOMBRE, null)
+        return if (v.isNullOrBlank()) null else v
+    }
+
+    fun salirDelJardin(ctx: Context) {
+        ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)
+            .edit().remove(CLAVE_JARDIN_NOMBRE).apply()
     }
 }

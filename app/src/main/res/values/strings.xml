@@ -6,6 +6,7 @@
     <string name="home_boton_hablar">Hablar con Fénix</string>
     <string name="home_ajustes">Ajustes</string>
     <string name="home_burbuja">Activar Fénix flotante 🔮</string>
+    <string name="home_jardin">Entrar al Jardín 🌿</string>
 
     <string name="chat_titulo">Teshuá</string>
     <string name="chat_subtitulo">Fénix en vivo</string>
@@ -20,6 +21,16 @@
     <string name="chat_reiniciar_cancelar_boton">Cancelar</string>
     <string name="chat_reiniciar_hecho">Conversación reiniciada.</string>
     <string name="chat_subtitulo_leccion">Lección: %1$s</string>
+
+    <string name="jardin_titulo">El Jardín</string>
+    <string name="jardin_subtitulo">Escribe tu nombre y un PIN de 4 dígitos para entrar. Si es la primera vez, se crea tu lugar en el Jardín; si ya lo tenías, vuelves a él.</string>
+    <string name="jardin_hint_nombre">Tu nombre</string>
+    <string name="jardin_hint_pin">PIN de 4 dígitos</string>
+    <string name="jardin_ayuda_pin">Guarda bien tu PIN: solo lo necesitas de nuevo si cambias de celular.</string>
+    <string name="jardin_boton_entrar">Entrar al Jardín</string>
+    <string name="jardin_error_nombre_vacio">Escribe tu nombre.</string>
+    <string name="jardin_error_pin">El PIN debe tener exactamente 4 números.</string>
+    <string name="jardin_error_conexion">No se pudo conectar con el Jardín: %1$s</string>
 
     <string name="ajustes_titulo">Ajustes</string>
     <string name="ajustes_clave_label">Tu clave personal de Cerebras</string>

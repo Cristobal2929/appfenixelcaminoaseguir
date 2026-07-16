@@ -14,6 +14,7 @@ import tempfile
 import time
 import subprocess
 import base64
+import hashlib
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -996,6 +997,92 @@ def _aplicar_eco_voz(ruta_mp3: str, filtro: str) -> str:
     except Exception as e:
         print(f"Aviso: no se pudo aplicar el eco a la voz ({e}), se usa audio original.")
         return ruta_mp3
+
+
+TABLA_IDENTIDADES = "fenix_identidades"
+
+
+def _normalizar_nombre(nombre: str) -> str:
+    """Minúsculas y sin espacios sobrantes, para comparar nombres sin
+    depender de mayúsculas o espacios extra que la persona haya tecleado."""
+    return re.sub(r"\s+", " ", (nombre or "").strip()).lower()
+
+
+def _hash_pin(pin: str) -> str:
+    """El PIN nunca se guarda en texto plano, solo su hash SHA-256."""
+    return hashlib.sha256((pin or "").encode("utf-8")).hexdigest()
+
+
+def entrar_o_registrar_identidad(nombre: str, pin: str):
+    """Identidad ligera del Jardín (Templo de Gratitud, Círculo de Historias,
+    Río de Conversación): sin contraseña completa ni sesión compleja, solo
+    nombre + PIN de 4 dígitos.
+
+    - Si el nombre no existe en 'fenix_identidades', se crea con ese PIN
+      (primer registro).
+    - Si el nombre ya existe, se compara el PIN; si coincide, entra; si no,
+      se rechaza (para que nadie más pueda "robar" un nombre ya usado).
+
+    Devuelve un dict: {"ok": bool, "mensaje": str, "nombre_visible": str,
+    "es_nuevo": bool}. El dispositivo debe guardar localmente el resultado
+    si ok=True, para no volver a pedir el PIN en el día a día; el nombre y
+    PIN solo se vuelven a usar si la persona cambia de celular.
+    """
+    nombre_visible = (nombre or "").strip()
+    nombre_norm = _normalizar_nombre(nombre)
+    pin_limpio = (pin or "").strip()
+
+    if not nombre_norm:
+        return {"ok": False, "mensaje": "Escribe tu nombre para entrar al Jardín.", "nombre_visible": "", "es_nuevo": False}
+    if not re.fullmatch(r"\d{4}", pin_limpio):
+        return {"ok": False, "mensaje": "El PIN debe ser de exactamente 4 números.", "nombre_visible": nombre_visible, "es_nuevo": False}
+    if not sb:
+        return {"ok": False, "mensaje": "⚠️ Supabase no está configurado en el Space.", "nombre_visible": nombre_visible, "es_nuevo": False}
+
+    pin_hash = _hash_pin(pin_limpio)
+
+    try:
+        res = (
+            sb.table(TABLA_IDENTIDADES)
+            .select("nombre_visible, pin_hash")
+            .eq("nombre_normalizado", nombre_norm)
+            .limit(1)
+            .execute()
+        )
+        filas = res.data or []
+
+        if filas:
+            existente = filas[0]
+            if existente.get("pin_hash") != pin_hash:
+                return {
+                    "ok": False,
+                    "mensaje": "Ese nombre ya está en uso con otro PIN. Si es tuyo, escribe el PIN con el que lo creaste; si no, elige otro nombre.",
+                    "nombre_visible": nombre_visible,
+                    "es_nuevo": False,
+                }
+            return {
+                "ok": True,
+                "mensaje": f"Bienvenido de vuelta, {existente.get('nombre_visible') or nombre_visible}.",
+                "nombre_visible": existente.get("nombre_visible") or nombre_visible,
+                "es_nuevo": False,
+            }
+
+        # No existía: se crea ahora mismo.
+        sb.table(TABLA_IDENTIDADES).insert({
+            "nombre_normalizado": nombre_norm,
+            "nombre_visible": nombre_visible,
+            "pin_hash": pin_hash,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }).execute()
+        return {
+            "ok": True,
+            "mensaje": f"Bienvenido al Jardín, {nombre_visible}. Guarda bien tu PIN por si cambias de celular.",
+            "nombre_visible": nombre_visible,
+            "es_nuevo": True,
+        }
+    except Exception as e:
+        print("Error en entrar_o_registrar_identidad:", e)
+        return {"ok": False, "mensaje": "No se pudo conectar con el Jardín en este momento. Intenta de nuevo.", "nombre_visible": nombre_visible, "es_nuevo": False}
 
 
 def generar_voz(texto: str, voz: str = None, rate: str = None, pitch: str = None, eco_filtro=None) -> str:

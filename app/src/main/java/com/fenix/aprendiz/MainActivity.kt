@@ -47,6 +47,11 @@ class MainActivity : AppCompatActivity() {
         findViewById<android.widget.TextView>(R.id.btnBurbujaHome).setOnClickListener {
             activarBurbuja()
         }
+
+        findViewById<android.widget.TextView>(R.id.btnJardinHome).setOnClickListener {
+            startActivity(Intent(this, IdentidadActivity::class.java))
+            overridePendingTransition(R.anim.slide_up_in, R.anim.fade_out)
+        }
     }
 
     private fun abrirChat(irDirectoAAjustes: Boolean = false) {
