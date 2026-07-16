@@ -7,6 +7,15 @@
     android:padding="20dp">
 
     <TextView
+        android:id="@+id/btnVolverJardin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/templo_volver"
+        android:textColor="@color/teshua_dorado_suave"
+        android:textSize="13sp"/>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"

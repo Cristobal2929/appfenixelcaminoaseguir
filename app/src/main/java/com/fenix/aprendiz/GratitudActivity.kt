@@ -47,6 +47,8 @@ class GratitudActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.btnGuardarGratitud).setOnClickListener { guardar() }
 
+        findViewById<TextView>(R.id.btnVolverJardin).setOnClickListener { finish() }
+
         cargarHistorial()
     }
 

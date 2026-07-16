@@ -50,7 +50,7 @@ class IdentidadActivity : AppCompatActivity() {
 
         btnIrTemplo.setOnClickListener {
             val nombre = Prefs.leerNombreJardin(this) ?: inputNombre.text.toString().trim()
-            startActivity(Intent(this, GratitudActivity::class.java).putExtra(GratitudActivity.EXTRA_NOMBRE, nombre))
+            startActivity(Intent(this, JardinActivity::class.java).putExtra(JardinActivity.EXTRA_NOMBRE, nombre))
         }
     }
 
