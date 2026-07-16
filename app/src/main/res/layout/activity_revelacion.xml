@@ -109,6 +109,13 @@
             android:background="@drawable/bg_casa_chip"
             android:visibility="gone"/>
 
+        <VideoView
+            android:id="@+id/videoAlma"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"/>
+
         <!-- Las 12 casas (se llenan por código) -->
         <GridLayout
             android:id="@+id/gridCasas"

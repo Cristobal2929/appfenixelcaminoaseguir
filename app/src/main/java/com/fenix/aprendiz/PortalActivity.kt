@@ -79,17 +79,22 @@ class PortalActivity : AppCompatActivity() {
         // Cálculo local (rápido). Cuando conectemos el Descifrador real,
         // aquí se hará la llamada al Space en un hilo y se leerá su respuesta.
         val datos = AlmaCalculo.descifrar(nombre, apellidos, dia, mes, anio)
+        val fechaIso = String.format("%04d-%02d-%02d", anio, mes, dia)
+        val nombreCompleto = "$nombre $apellidos"
 
-        Prefs.guardarCasa(this, datos.numeroAlma, sexo)
+        Prefs.guardarCasa(this, datos.tribu.numeroEsencia, sexo)
         Prefs.guardarNombreJardin(this, nombre)
 
         progress.visibility = View.GONE
 
         startActivity(
             Intent(this, RevelacionActivity::class.java)
-                .putExtra(RevelacionActivity.EXTRA_NUMERO, datos.numeroAlma)
+                .putExtra(RevelacionActivity.EXTRA_NUMERO, datos.tribu.numeroEsencia)
+                .putExtra(RevelacionActivity.EXTRA_CODIGO, datos.codigo)
                 .putExtra(RevelacionActivity.EXTRA_SEXO, sexo)
                 .putExtra(RevelacionActivity.EXTRA_NOMBRE, nombre)
+                .putExtra(RevelacionActivity.EXTRA_NOMBRE_COMPLETO, nombreCompleto)
+                .putExtra(RevelacionActivity.EXTRA_FECHA, fechaIso)
         )
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         finish()
