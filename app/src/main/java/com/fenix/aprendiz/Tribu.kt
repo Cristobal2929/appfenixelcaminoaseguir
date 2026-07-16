@@ -141,4 +141,7 @@ object Tribus {
     }
 
     fun porId(id: String): Tribu? = TODAS.firstOrNull { it.id == id }
+
+    /** Devuelve la casa cuyo numeroEsencia coincide (1-9, 11, 22, 33). */
+    fun porNumero(numero: Int): Tribu? = TODAS.firstOrNull { it.numeroEsencia == numero }
 }

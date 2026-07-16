@@ -92,4 +92,33 @@
     <string name="circulo_error_conexion">No se pudo conectar con el Círculo: %1$s</string>
     <string name="circulo_sin_historias">Aún no hay historias. Sé el primero en sembrar una. 🌱</string>
     <string name="circulo_volver">← Volver al Jardín</string>
+
+    <!-- ===== Portal de Teshuá (descifrar el alma → casa) ===== -->
+    <string name="portal_titulo">El Portal</string>
+    <string name="portal_intro">Separado de Mí has estado, pero nunca lo estuviste.
+
+Descifra tu destino. Tu nombre, tus apellidos y tu fecha de nacimiento son la llave que lo abre todo.
+
+Pon tu llave aquí abajo.</string>
+    <string name="portal_hint_nombre">Tu nombre</string>
+    <string name="portal_hint_apellidos">Tus apellidos</string>
+    <string name="portal_fecha_label">Tu fecha de nacimiento</string>
+    <string name="portal_fecha_pulsa">Pulsa para elegir tu fecha</string>
+    <string name="portal_sexo_label">¿Hijo o hija de la casa?</string>
+    <string name="portal_sexo_h">Hijo</string>
+    <string name="portal_sexo_m">Hija</string>
+    <string name="portal_boton_descifrar">Descifrar mi destino</string>
+    <string name="portal_error_incompleto">Completa tu nombre, tus apellidos y tu fecha de nacimiento.</string>
+
+    <!-- ===== Revelación de la casa ===== -->
+    <string name="rev_titulo">Las Doce Casas de Israel</string>
+    <string name="rev_esta_es_h">Esta es tu casa, amado hijo.
+Bienvenido a casa.</string>
+    <string name="rev_esta_es_m">Esta es tu casa, amada hija.
+Bienvenida a casa.</string>
+    <string name="rev_codigo_label">Número de tu alma</string>
+    <string name="rev_video_creando">Tu vídeo se está creando…</string>
+    <string name="rev_boton_empezar">Empieza tu camino de la Teshuá — el retorno del alma</string>
+    <string name="rev_promesa">La gran promesa del Padre al hombre y a la casa de Israel</string>
+    <string name="rev_versiculo">«En Tu luz veremos la luz» — Salmos 36:9</string>
 </resources>

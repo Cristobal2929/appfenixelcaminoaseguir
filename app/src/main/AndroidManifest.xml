@@ -30,6 +30,17 @@
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout"/>
 
         <activity
+            android:name=".PortalActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FenixAprendiz"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <activity
+            android:name=".RevelacionActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FenixAprendiz"/>
+
+        <activity
             android:name=".ChatActivity"
             android:exported="false"
             android:theme="@style/Theme.FenixAprendiz"

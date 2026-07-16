@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/teshua_fondo"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="24dp">
+
+        <Space android:layout_width="0dp" android:layout_height="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rev_titulo"
+            android:textColor="@color/teshua_dorado"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.04"/>
+
+        <View
+            android:layout_width="120dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/hilo_estandarte_doce"/>
+
+        <!-- Casa del centro -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:background="@drawable/bg_casa_centro"
+            android:padding="22dp">
+
+            <TextView
+                android:id="@+id/tvCasaNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/teshua_dorado"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05"/>
+
+            <TextView
+                android:id="@+id/tvCasaSimbolo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/teshua_texto_apagado"
+                android:textSize="13sp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/tvBienvenida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/teshua_texto"
+                android:textSize="17sp"
+                android:gravity="center"
+                android:lineSpacingExtra="3dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="@string/rev_codigo_label"
+                android:textColor="@color/teshua_dorado_suave"
+                android:textSize="12sp"
+                android:letterSpacing="0.08"/>
+
+            <TextView
+                android:id="@+id/tvNumeroAlma"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/teshua_dorado"
+                android:textSize="40sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- Mensaje del portal -->
+        <TextView
+            android:id="@+id/tvMensajeCasa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/teshua_texto"
+            android:textSize="15sp"
+            android:lineSpacingExtra="4dp"/>
+
+        <!-- Vídeo (oculto hasta que el portal devuelva uno) -->
+        <TextView
+            android:id="@+id/tvVideoPlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/rev_video_creando"
+            android:textColor="@color/teshua_texto_apagado"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:padding="18dp"
+            android:background="@drawable/bg_casa_chip"
+            android:visibility="gone"/>
+
+        <!-- Las 12 casas (se llenan por código) -->
+        <GridLayout
+            android:id="@+id/gridCasas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:columnCount="3"
+            android:useDefaultMargins="false"/>
+
+        <Button
+            android:id="@+id/btnEmpezarCamino"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/rev_boton_empezar"
+            android:backgroundTint="@color/teshua_dorado"
+            android:textColor="@color/teshua_fondo"
+            android:textStyle="bold"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/rev_promesa"
+            android:textColor="@color/teshua_dorado_suave"
+            android:textSize="13sp"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/rev_versiculo"
+            android:textColor="@color/teshua_texto_apagado"
+            android:textSize="13sp"
+            android:textStyle="italic"
+            android:gravity="center"/>
+
+    </LinearLayout>
+</ScrollView>

@@ -23,6 +23,8 @@ object Prefs {
     private const val CLAVE_MENSAJES_UI = "mensajes_ui"
     private const val CLAVE_ULTIMA_LECCION = "ultima_leccion"
     private const val CLAVE_JARDIN_NOMBRE = "jardin_nombre"
+    private const val CLAVE_CASA_NUMERO = "casa_numero"
+    private const val CLAVE_CASA_SEXO = "casa_sexo"
 
     fun guardarClaveCerebras(ctx: Context, clave: String) {
         ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)
@@ -119,5 +121,33 @@ object Prefs {
     fun salirDelJardin(ctx: Context) {
         ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)
             .edit().remove(CLAVE_JARDIN_NOMBRE).apply()
+    }
+
+    /**
+     * Casa (tribu) revelada en el Portal de Teshuá. Se guarda el número del
+     * alma (numeroEsencia, 1-9/11/22/33) y el sexo ("h"/"m") para el saludo.
+     * Si hay casa guardada, el Portal no se vuelve a mostrar al arrancar.
+     */
+    fun guardarCasa(ctx: Context, numeroAlma: Int, sexo: String) {
+        ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)
+            .edit()
+            .putInt(CLAVE_CASA_NUMERO, numeroAlma)
+            .putString(CLAVE_CASA_SEXO, sexo)
+            .apply()
+    }
+
+    /** null si aún no ha pasado por el Portal. */
+    fun leerCasaNumero(ctx: Context): Int? {
+        val p = ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)
+        return if (p.contains(CLAVE_CASA_NUMERO)) p.getInt(CLAVE_CASA_NUMERO, -1) else null
+    }
+
+    fun leerSexoCasa(ctx: Context): String =
+        ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)
+            .getString(CLAVE_CASA_SEXO, "h") ?: "h"
+
+    fun olvidarCasa(ctx: Context) {
+        ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)
+            .edit().remove(CLAVE_CASA_NUMERO).remove(CLAVE_CASA_SEXO).apply()
     }
 }

@@ -15,7 +15,11 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
+            // Primera vez (sin casa revelada) -> Portal de Teshuá.
+            // Si ya pasó por el Portal, directo a la app.
+            val destino = if (Prefs.leerCasaNumero(this) == null)
+                PortalActivity::class.java else MainActivity::class.java
+            startActivity(Intent(this, destino))
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             finish()
         }, DURACION_MS)
