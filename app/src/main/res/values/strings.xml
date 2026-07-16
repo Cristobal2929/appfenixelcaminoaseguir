@@ -51,6 +51,16 @@
     <string name="templo_sin_gratitudes">Aún no has guardado ninguna gratitud.</string>
     <string name="templo_volver">← Volver al Jardín</string>
 
+    <string name="altar_titulo">Altar de la Luz</string>
+    <string name="altar_subtitulo">Enciende una luz con una intención o plegaria.</string>
+    <string name="altar_hint">Enciendo esta luz por…</string>
+    <string name="altar_boton_encender">Encender luz</string>
+    <string name="altar_historial_titulo">Tus luces encendidas</string>
+    <string name="altar_error_vacio">Escribe una intención antes de encender la luz.</string>
+    <string name="altar_error_conexion">No se pudo conectar con el Altar: %1$s</string>
+    <string name="altar_sin_luces">Aún no has encendido ninguna luz.</string>
+    <string name="altar_volver">← Volver al Jardín</string>
+
     <string name="ajustes_titulo">Ajustes</string>
     <string name="ajustes_clave_label">Tu clave personal de Cerebras</string>
     <string name="ajustes_clave_hint">csk-…</string>
