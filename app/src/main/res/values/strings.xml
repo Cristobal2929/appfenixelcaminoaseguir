@@ -81,4 +81,15 @@
     <string name="ajustes_estado_pool">Usando el pool compartido del Space.</string>
 
     <string name="splash_subtitulo">El retorno del alma a la fuente divina</string>
+
+    <!-- Circulo de Historias -->
+    <string name="circulo_titulo">Círculo de Historias</string>
+    <string name="circulo_subtitulo">Comparte tu experiencia. Aquí florecen juntas las historias de todos.</string>
+    <string name="circulo_hint">Mi historia de hoy…</string>
+    <string name="circulo_boton_compartir">Compartir en el Círculo</string>
+    <string name="circulo_historial_titulo">Historias del Círculo</string>
+    <string name="circulo_error_vacio">Escribe tu historia antes de compartirla.</string>
+    <string name="circulo_error_conexion">No se pudo conectar con el Círculo: %1$s</string>
+    <string name="circulo_sin_historias">Aún no hay historias. Sé el primero en sembrar una. 🌱</string>
+    <string name="circulo_volver">← Volver al Jardín</string>
 </resources>
