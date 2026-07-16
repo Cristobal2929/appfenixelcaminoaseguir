@@ -52,7 +52,8 @@ class JardinActivity : AppCompatActivity() {
             startActivity(Intent(this, RioConversacionActivity::class.java).putExtra(RioConversacionActivity.EXTRA_NOMBRE, nombre))
         }
 
-        val proximamente = { Toast.makeText(this, getString(R.string.jardin_proximamente), Toast.LENGTH_SHORT).show() }
-        findViewById<Button>(R.id.btnJardinCirculo).setOnClickListener { proximamente() }
+        findViewById<Button>(R.id.btnJardinCirculo).setOnClickListener {
+            startActivity(Intent(this, CirculoActivity::class.java).putExtra(CirculoActivity.EXTRA_NOMBRE, nombre))
+        }
     }
 }
