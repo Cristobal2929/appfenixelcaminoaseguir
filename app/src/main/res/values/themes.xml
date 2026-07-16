@@ -19,21 +19,21 @@
     </style>
 
     <!-- Título grande de pantalla: trazo tallado/inscripción en piedra -->
-    <style name="Teshua.Titulo">
+    <style name="Teshua.Titulo" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/cinzel_decorative_bold</item>
         <item name="android:textColor">@color/teshua_oro_viejo</item>
         <item name="android:letterSpacing">0.04</item>
     </style>
 
     <!-- Subtítulos y botones: mismo espíritu tallado pero más sobrio -->
-    <style name="Teshua.Subtitulo">
+    <style name="Teshua.Subtitulo" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/cinzel_regular</item>
         <item name="android:textColor">@color/teshua_pergamino</item>
         <item name="android:letterSpacing">0.02</item>
     </style>
 
     <!-- Cuerpo de texto: legible, cálido, para lecciones largas -->
-    <style name="Teshua.Cuerpo">
+    <style name="Teshua.Cuerpo" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/frank_ruhl_libre_regular</item>
         <item name="android:textColor">@color/teshua_pergamino</item>
     </style>
