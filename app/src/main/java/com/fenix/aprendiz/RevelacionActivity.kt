@@ -120,6 +120,11 @@ class RevelacionActivity : AppCompatActivity() {
             onOk = { url ->
                 runOnUiThread {
                     placeholder.visibility = View.GONE
+                    // Gigante: ancho completo y proporción vertical 9:16.
+                    val anchoContenido = resources.displayMetrics.widthPixels - 2 * dp(24)
+                    video.layoutParams = video.layoutParams.apply {
+                        height = anchoContenido * 16 / 9
+                    }
                     video.visibility = View.VISIBLE
                     val mc = MediaController(this)
                     mc.setAnchorView(video)
