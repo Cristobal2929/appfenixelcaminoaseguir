@@ -24,6 +24,7 @@ class IdentidadActivity : AppCompatActivity() {
     private lateinit var inputPin: EditText
     private lateinit var progress: View
     private lateinit var estado: TextView
+    private lateinit var btnIrTemplo: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,13 +34,23 @@ class IdentidadActivity : AppCompatActivity() {
         inputPin = findViewById(R.id.inputPinJardin)
         progress = findViewById(R.id.progressJardin)
         estado = findViewById(R.id.estadoJardin)
+        btnIrTemplo = findViewById(R.id.btnIrTemplo)
 
         // Si el dispositivo ya tiene una identidad guardada, la mostramos
         // precargada (la persona puede seguir de largo con el mismo PIN,
-        // o cambiar de nombre si quiere entrar como alguien más).
-        Prefs.leerNombreJardin(this)?.let { inputNombre.setText(it) }
+        // o cambiar de nombre si quiere entrar como alguien más), y ya le
+        // damos acceso directo al Templo sin pedirle el PIN de nuevo.
+        Prefs.leerNombreJardin(this)?.let {
+            inputNombre.setText(it)
+            btnIrTemplo.visibility = View.VISIBLE
+        }
 
         findViewById<Button>(R.id.btnEntrarJardin).setOnClickListener { intentarEntrar() }
+
+        btnIrTemplo.setOnClickListener {
+            val nombre = Prefs.leerNombreJardin(this) ?: inputNombre.text.toString().trim()
+            startActivity(Intent(this, GratitudActivity::class.java).putExtra(GratitudActivity.EXTRA_NOMBRE, nombre))
+        }
     }
 
     private fun intentarEntrar() {
@@ -68,8 +79,7 @@ class IdentidadActivity : AppCompatActivity() {
                     if (resultado.ok) {
                         Prefs.guardarNombreJardin(this, resultado.nombreVisible)
                         Toast.makeText(this, resultado.mensaje, Toast.LENGTH_LONG).show()
-                        // Aquí, cuando exista, se abrirá la siguiente pantalla
-                        // del Jardín (por ahora esta es la única pieza construida).
+                        btnIrTemplo.visibility = View.VISIBLE
                     }
                 }
             },

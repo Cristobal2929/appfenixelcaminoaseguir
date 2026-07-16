@@ -95,5 +95,15 @@
             android:gravity="center"
             android:visibility="gone"/>
 
+        <Button
+            android:id="@+id/btnIrTemplo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/jardin_boton_ir_templo"
+            android:backgroundTint="@color/teshua_burbuja_fenix"
+            android:textColor="@color/teshua_dorado_suave"
+            android:visibility="gone"/>
+
     </LinearLayout>
 </ScrollView>

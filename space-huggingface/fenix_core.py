@@ -1085,6 +1085,75 @@ def entrar_o_registrar_identidad(nombre: str, pin: str):
         return {"ok": False, "mensaje": "No se pudo conectar con el Jardín en este momento. Intenta de nuevo.", "nombre_visible": nombre_visible, "es_nuevo": False}
 
 
+TABLA_GRATITUDES = "fenix_gratitudes"
+
+
+def guardar_gratitud(nombre: str, texto: str):
+    """Templo de Gratitud: guarda una gratitud del día para 'nombre'.
+
+    No vuelve a pedir el PIN aquí — la identidad ya se validó una vez en la
+    puerta de entrada del Jardín (entrar_o_registrar_identidad) y el
+    dispositivo recuerda el nombre localmente. Esta función solo exige que
+    el nombre ya exista como identidad registrada, para no crear
+    gratitudes "huérfanas" de alguien que nunca entró al Jardín.
+    """
+    nombre_visible = (nombre or "").strip()
+    nombre_norm = _normalizar_nombre(nombre)
+    texto_limpio = (texto or "").strip()
+
+    if not nombre_norm:
+        return {"ok": False, "mensaje": "Falta tu nombre para guardar la gratitud."}
+    if not texto_limpio:
+        return {"ok": False, "mensaje": "Escribe algo de gratitud antes de guardar."}
+    if not sb:
+        return {"ok": False, "mensaje": "⚠️ Supabase no está configurado en el Space."}
+
+    try:
+        # Confirma que la identidad exista (mismo patrón de normalización que fenix_identidades).
+        existe = (
+            sb.table(TABLA_IDENTIDADES)
+            .select("nombre_visible")
+            .eq("nombre_normalizado", nombre_norm)
+            .limit(1)
+            .execute()
+        )
+        if not (existe.data or []):
+            return {"ok": False, "mensaje": "No encontramos tu identidad en el Jardín. Entra primero desde la puerta principal."}
+
+        sb.table(TABLA_GRATITUDES).insert({
+            "nombre_normalizado": nombre_norm,
+            "nombre_visible": nombre_visible,
+            "texto": texto_limpio,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }).execute()
+        return {"ok": True, "mensaje": "Tu gratitud quedó guardada en el Templo."}
+    except Exception as e:
+        print("Error en guardar_gratitud:", e)
+        return {"ok": False, "mensaje": "No se pudo guardar la gratitud en este momento. Intenta de nuevo."}
+
+
+def listar_gratitudes(nombre: str, limite: int = 200):
+    """Devuelve las gratitudes guardadas de 'nombre', más recientes primero.
+    Por ahora es solo la lista cruda (texto + fecha); la vista tipo
+    'constelación de luces' se construye después, en la capa visual."""
+    nombre_norm = _normalizar_nombre(nombre)
+    if not nombre_norm or not sb:
+        return []
+    try:
+        res = (
+            sb.table(TABLA_GRATITUDES)
+            .select("texto, created_at")
+            .eq("nombre_normalizado", nombre_norm)
+            .order("created_at", desc=True)
+            .limit(limite)
+            .execute()
+        )
+        return res.data or []
+    except Exception as e:
+        print("Error en listar_gratitudes:", e)
+        return []
+
+
 def generar_voz(texto: str, voz: str = None, rate: str = None, pitch: str = None, eco_filtro=None) -> str:
     """Genera el audio de la respuesta.
 

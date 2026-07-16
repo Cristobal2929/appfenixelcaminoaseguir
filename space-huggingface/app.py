@@ -36,6 +36,8 @@ from fenix_core import (
     texto_biblioteca,
     borrar_libro,
     listar_libros,
+    guardar_gratitud,
+    listar_gratitudes,
 )
 from fenix_progreso import obtener_progreso, registrar_pregunta
 from gradio_theme_fenix import apply_fenix_theme, FENIX_CSS, fenix_header, fenix_footer
@@ -190,6 +192,22 @@ def identidad_login_ui(nombre, pin):
     Android lo parsee fácil, sin depender de un formato de salida nuevo."""
     import json as _json
     resultado = fenix_core.entrar_o_registrar_identidad(nombre, pin)
+    return _json.dumps(resultado, ensure_ascii=False)
+
+
+def gratitud_guardar_ui(nombre, texto):
+    """Envoltorio de API para guardar una gratitud del Templo. Devuelve
+    JSON en texto plano: {"ok": bool, "mensaje": str}."""
+    import json as _json
+    resultado = guardar_gratitud(nombre, texto)
+    return _json.dumps(resultado, ensure_ascii=False)
+
+
+def gratitud_listar_ui(nombre):
+    """Envoltorio de API para listar las gratitudes guardadas de 'nombre'.
+    Devuelve JSON en texto plano: una lista de {"texto":..., "created_at":...}."""
+    import json as _json
+    resultado = listar_gratitudes(nombre)
     return _json.dumps(resultado, ensure_ascii=False)
 
 
@@ -623,6 +641,32 @@ with gr.Blocks(title="Fénix Aprendiz") as demo:
         inputs=[identidad_nombre_in, identidad_pin_in],
         outputs=[identidad_resultado_out],
         api_name="identidad_login",
+    )
+
+    # --- Endpoints de API del Templo de Gratitud ---
+    with gr.Row(visible=False):
+        gratitud_nombre_in = gr.Textbox(label="nombre")
+        gratitud_texto_in = gr.Textbox(label="texto")
+        gratitud_guardar_out = gr.Textbox(label="resultado_json")
+        gratitud_guardar_btn = gr.Button("gratitud_guardar")
+
+    gratitud_guardar_btn.click(
+        fn=gratitud_guardar_ui,
+        inputs=[gratitud_nombre_in, gratitud_texto_in],
+        outputs=[gratitud_guardar_out],
+        api_name="gratitud_guardar",
+    )
+
+    with gr.Row(visible=False):
+        gratitud_listar_nombre_in = gr.Textbox(label="nombre")
+        gratitud_listar_out = gr.Textbox(label="resultado_json")
+        gratitud_listar_btn = gr.Button("gratitud_listar")
+
+    gratitud_listar_btn.click(
+        fn=gratitud_listar_ui,
+        inputs=[gratitud_listar_nombre_in],
+        outputs=[gratitud_listar_out],
+        api_name="gratitud_listar",
     )
 
     # Gestión de Eventos

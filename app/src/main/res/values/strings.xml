@@ -31,6 +31,16 @@
     <string name="jardin_error_nombre_vacio">Escribe tu nombre.</string>
     <string name="jardin_error_pin">El PIN debe tener exactamente 4 números.</string>
     <string name="jardin_error_conexion">No se pudo conectar con el Jardín: %1$s</string>
+    <string name="jardin_boton_ir_templo">Ir al Templo de Gratitud 🙏</string>
+
+    <string name="templo_titulo">Templo de Gratitud</string>
+    <string name="templo_subtitulo">Cada día, deja aquí una gratitud antes de cerrar.</string>
+    <string name="templo_hint">Hoy agradezco…</string>
+    <string name="templo_boton_guardar">Guardar gratitud</string>
+    <string name="templo_historial_titulo">Tus gratitudes</string>
+    <string name="templo_error_vacio">Escribe algo antes de guardar.</string>
+    <string name="templo_error_conexion">No se pudo conectar con el Templo: %1$s</string>
+    <string name="templo_sin_gratitudes">Aún no has guardado ninguna gratitud.</string>
 
     <string name="ajustes_titulo">Ajustes</string>
     <string name="ajustes_clave_label">Tu clave personal de Cerebras</string>
