@@ -21,7 +21,7 @@ import java.net.URL
  *   2) GET  {space}/gradio_api/call/responder/{event_id}
  *      -> stream de eventos "event: complete" + "data: [...]"
  *
- * La función `responder(mensaje, historial, voz_seleccionada, clave_usuario)`
+ * La función `responder_movil(mensaje, historial, voz_seleccionada, clave_usuario, nombre_jardin)`
  * devuelve [chatbot, txt, audio_respuesta, historial_view].
  *
  * FIX FASE D: el `chatbot` de este Space usa el formato "messages" de
@@ -30,11 +30,17 @@ import java.net.URL
  * soporta ambos formatos por si el Space cambia de tipo en el futuro.
  * También se extrae la URL del audio de respuesta (audio_respuesta,
  * índice 2) para poder reproducirlo nativamente en el chat flotante.
+ *
+ * CONEXIÓN CON EL JARDÍN: este endpoint ("fenix_chat_movil") es distinto
+ * del que usa la web del Space (que no tiene api_name explícito y no debe
+ * tocarse desde aquí). Es exclusivo para la app y, si la persona tiene una
+ * identidad guardada en el Jardín (Prefs.leerNombreJardin), Fénix recibe
+ * su nombre y usa su lección actual + gratitudes recientes como contexto.
  */
 object FenixApiClient {
 
     private const val SPACE_BASE = "https://cristobal299-fenix-aprendiz.hf.space"
-    private const val API_NAME = "responder"
+    private const val API_NAME = "fenix_chat_movil"
 
     /**
      * Ejecuta en background. Llama a onResultado/onError en ese mismo hilo
@@ -54,12 +60,13 @@ object FenixApiClient {
         historialGradio: JSONArray,
         claveUsuario: String?,
         vozSeleccionada: String = "Anciano Sabio (Hombre Místico)",
+        nombreJardin: String? = null,
         onResultado: (respuestaTexto: String, historialActualizado: JSONArray, audioUrl: String?, categoria: String?) -> Unit,
         onError: (String) -> Unit
     ) {
         Thread {
             try {
-                val eventId = iniciarLlamada(mensaje, historialGradio, claveUsuario, vozSeleccionada)
+                val eventId = iniciarLlamada(mensaje, historialGradio, claveUsuario, vozSeleccionada, nombreJardin)
                 val resultado = leerResultado(eventId)
                 if (resultado == null) {
                     onError("El Space no respondió a tiempo.")
@@ -174,7 +181,8 @@ object FenixApiClient {
         mensaje: String,
         historial: JSONArray,
         claveUsuario: String?,
-        vozSeleccionada: String
+        vozSeleccionada: String,
+        nombreJardin: String?
     ): String {
         val url = URL("$SPACE_BASE/gradio_api/call/$API_NAME")
         val con = url.openConnection() as HttpURLConnection
@@ -188,7 +196,8 @@ object FenixApiClient {
         datos.put(mensaje)
         datos.put(historial)
         datos.put(vozSeleccionada)
-        if (claveUsuario.isNullOrBlank()) datos.put(JSONObject.NULL) else datos.put(claveUsuario)
+        datos.put(claveUsuario ?: "")
+        datos.put(nombreJardin ?: "")
 
         val body = JSONObject().put("data", datos).toString()
         val os: OutputStream = con.outputStream

@@ -223,10 +223,12 @@ class ChatActivity : AppCompatActivity() {
         Prefs.guardarMensajesUI(this, adapter.obtenerTodos())
 
         val clave = Prefs.leerClaveCerebras(this)
+        val nombreJardin = Prefs.leerNombreJardin(this)
         FenixApiClient.enviarMensaje(
             mensaje = texto,
             historialGradio = historialGradio,
             claveUsuario = clave,
+            nombreJardin = nombreJardin,
             onResultado = { respuesta, historialActualizado, audioUrl, categoria ->
                 runOnUiThread {
                     progress.visibility = View.GONE
