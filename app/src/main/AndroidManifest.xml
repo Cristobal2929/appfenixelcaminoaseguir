@@ -58,6 +58,12 @@
             android:theme="@style/Theme.FenixAprendiz"
             android:windowSoftInputMode="adjustResize"/>
 
+        <activity
+            android:name=".RioConversacionActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FenixAprendiz"
+            android:windowSoftInputMode="adjustResize"/>
+
         <service
             android:name=".FloatingBubbleService"
             android:exported="false"/>

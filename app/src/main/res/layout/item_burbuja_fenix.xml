@@ -1,0 +1,18 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:gravity="start"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tvBurbujaFenix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_burbuja_fenix"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="10dp"
+        android:textColor="@color/teshua_texto"
+        android:textSize="14sp" />
+
+</LinearLayout>
