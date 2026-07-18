@@ -22,6 +22,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONArray
@@ -56,6 +58,10 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var estadoClave: TextView
     private lateinit var btnMic: ImageButton
     private lateinit var tvSubtitulo: TextView
+    private lateinit var drawer: DrawerLayout
+    private lateinit var rvHistorial: RecyclerView
+    private lateinit var tvHistorialVacio: TextView
+    private lateinit var convAdapter: ConversacionesAdapter
 
     private val historialGradio = JSONArray()
     private var mediaPlayer: MediaPlayer? = null
@@ -136,6 +142,26 @@ class ChatActivity : AppCompatActivity() {
 
         btnMic.setOnClickListener { onMicPulsado() }
 
+        // ── Historial lateral (cajón izquierdo) ──
+        drawer = findViewById(R.id.drawerChat)
+        rvHistorial = findViewById(R.id.rvHistorial)
+        tvHistorialVacio = findViewById(R.id.tvHistorialVacio)
+        convAdapter = ConversacionesAdapter(
+            mutableListOf(),
+            alAbrir = { abrirDelHistorial(it) },
+            alBorrar = { confirmarBorrado(it) }
+        )
+        rvHistorial.layoutManager = LinearLayoutManager(this)
+        rvHistorial.adapter = convAdapter
+
+        findViewById<ImageButton>(R.id.btnHistorial).setOnClickListener {
+            refrescarHistorial()
+            drawer.openDrawer(GravityCompat.START)
+        }
+        findViewById<Button>(R.id.btnNuevaConversacion).setOnClickListener {
+            nuevaConversacionUI()
+        }
+
         actualizarEstadoClave()
 
         if (intent.getBooleanExtra(EXTRA_ABRIR_AJUSTES, false)) {
@@ -153,7 +179,11 @@ class ChatActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        cerrar()
+        if (::drawer.isInitialized && drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            cerrar()
+        }
     }
 
     private fun confirmarReinicioConversacion() {
@@ -169,11 +199,73 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun reiniciarConversacion() {
+        // "Reiniciar" descarta del todo la conversación actual (también del
+        // historial) y arranca una nueva y vacía. Para conservar la actual y
+        // empezar otra, se usa "Nueva conversación" en el cajón lateral.
+        Prefs.borrarConversacion(this, Prefs.idConversacionActual(this))
+        Prefs.nuevaConversacion(this)
         adapter.limpiar()
         while (historialGradio.length() > 0) historialGradio.remove(0)
-        Prefs.reiniciarConversacion(this)
         actualizarSubtitulo(null)
         Toast.makeText(this, R.string.chat_reiniciar_hecho, Toast.LENGTH_SHORT).show()
+    }
+
+    /** Empieza una conversación nueva CONSERVANDO la actual en el historial. */
+    private fun nuevaConversacionUI() {
+        Prefs.archivarConversacionActual(
+            this, adapter.obtenerTodos(), historialGradio, Prefs.leerUltimaLeccion(this)
+        )
+        Prefs.nuevaConversacion(this)
+        adapter.limpiar()
+        while (historialGradio.length() > 0) historialGradio.remove(0)
+        actualizarSubtitulo(null)
+        cerrarDrawerSiAbierto()
+        Toast.makeText(this, "Nueva conversación", Toast.LENGTH_SHORT).show()
+    }
+
+    /** Abre una conversación guardada desde el historial (guardando antes la actual). */
+    private fun abrirDelHistorial(resumen: Prefs.ResumenConversacion) {
+        Prefs.archivarConversacionActual(
+            this, adapter.obtenerTodos(), historialGradio, Prefs.leerUltimaLeccion(this)
+        )
+        val conv = Prefs.abrirConversacion(this, resumen.id) ?: return
+        adapter.cargarGuardados(conv.mensajes)
+        while (historialGradio.length() > 0) historialGradio.remove(0)
+        for (i in 0 until conv.historial.length()) historialGradio.put(conv.historial.get(i))
+        actualizarSubtitulo(conv.leccion)
+        if (adapter.itemCount > 0) rv.scrollToPosition(adapter.itemCount - 1)
+        cerrarDrawerSiAbierto()
+    }
+
+    private fun confirmarBorrado(resumen: Prefs.ResumenConversacion) {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.chat_conv_borrar_titulo)
+            .setMessage(R.string.chat_conv_borrar_mensaje)
+            .setPositiveButton(R.string.chat_conv_borrar_boton) { d, _ ->
+                Prefs.borrarConversacion(this, resumen.id)
+                // Si borré la que estaba abierta, limpio la pantalla y arranco una nueva.
+                if (resumen.id == Prefs.idConversacionActual(this)) {
+                    Prefs.nuevaConversacion(this)
+                    adapter.limpiar()
+                    while (historialGradio.length() > 0) historialGradio.remove(0)
+                    actualizarSubtitulo(null)
+                }
+                refrescarHistorial()
+                d.dismiss()
+            }
+            .setNegativeButton(R.string.chat_conv_cancelar) { d, _ -> d.dismiss() }
+            .show()
+    }
+
+    private fun refrescarHistorial() {
+        val lista = Prefs.listarConversaciones(this)
+        convAdapter.refrescar(lista)
+        tvHistorialVacio.visibility = if (lista.isEmpty()) View.VISIBLE else View.GONE
+        rvHistorial.visibility = if (lista.isEmpty()) View.GONE else View.VISIBLE
+    }
+
+    private fun cerrarDrawerSiAbierto() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) drawer.closeDrawer(GravityCompat.START)
     }
 
     private fun onMicPulsado() {
@@ -242,6 +334,8 @@ class ChatActivity : AppCompatActivity() {
                     Prefs.guardarHistorialGradio(this, historialGradio)
                     Prefs.guardarMensajesUI(this, adapter.obtenerTodos())
                     Prefs.guardarUltimaLeccion(this, categoria)
+                    // Refleja también la conversación activa en el historial lateral.
+                    Prefs.archivarConversacionActual(this, adapter.obtenerTodos(), historialGradio, categoria)
 
                     if (audioUrl != null) reproducirAudio(audioUrl)
                 }

@@ -189,8 +189,10 @@ object FenixApiClient {
         con.requestMethod = "POST"
         con.doOutput = true
         con.setRequestProperty("Content-Type", "application/json")
-        con.connectTimeout = 15000
-        con.readTimeout = 15000
+        // Arranque en frío: si el Space está dormido tarda en despertar, así
+        // que damos 30 s para conectar y arrancar la llamada.
+        con.connectTimeout = 30000
+        con.readTimeout = 30000
 
         val datos = JSONArray()
         datos.put(mensaje)
@@ -217,8 +219,12 @@ object FenixApiClient {
         val url = URL("$SPACE_BASE/gradio_api/call/$API_NAME/$eventId")
         val con = url.openConnection() as HttpURLConnection
         con.requestMethod = "GET"
-        con.connectTimeout = 15000
-        con.readTimeout = 60000
+        con.connectTimeout = 30000
+        // Espera generosa mientras "está escribiendo": el Space puede estar
+        // despertando (arranque en frío) y el ciclo completo (Cerebras +
+        // maestro + voz) tarda. Antes se rendía a los 60 s; ahora aguanta
+        // hasta 3 minutos antes de dar por perdida la respuesta.
+        con.readTimeout = 180000
 
         val reader = BufferedReader(InputStreamReader(con.inputStream, Charsets.UTF_8))
         var linea: String?

@@ -121,4 +121,12 @@ Bienvenida a casa.</string>
     <string name="rev_boton_empezar">Empieza tu camino de la Teshuá — el retorno del alma</string>
     <string name="rev_promesa">La gran promesa del Padre al hombre y a la casa de Israel</string>
     <string name="rev_versiculo">«En Tu luz veremos la luz» — Salmos 36:9</string>
+    <string name="chat_historial_desc">Historial de conversaciones</string>
+    <string name="chat_historial_titulo">Tus conversaciones</string>
+    <string name="chat_nueva_conversacion">＋  Nueva conversación</string>
+    <string name="chat_historial_vacio">Aún no tienes conversaciones guardadas. Empieza a hablar con Fénix y aparecerán aquí.</string>
+    <string name="chat_conv_borrar_titulo">¿Borrar esta conversación?</string>
+    <string name="chat_conv_borrar_mensaje">Se quitará del historial de este dispositivo. No se puede deshacer.</string>
+    <string name="chat_conv_borrar_boton">Borrar</string>
+    <string name="chat_conv_cancelar">Cancelar</string>
 </resources>

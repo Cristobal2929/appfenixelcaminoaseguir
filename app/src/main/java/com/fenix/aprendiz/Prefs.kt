@@ -150,4 +150,133 @@ object Prefs {
         ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)
             .edit().remove(CLAVE_CASA_NUMERO).remove(CLAVE_CASA_SEXO).apply()
     }
+
+    // ── Historial de conversaciones (varias, guardadas SOLO en este dispositivo) ──
+    private const val CLAVE_CONVERSACIONES = "conversaciones"
+    private const val CLAVE_CONV_ACTUAL = "conv_actual_id"
+
+    /** Resumen para la lista del cajón izquierdo: id, título y fecha. */
+    data class ResumenConversacion(val id: String, val titulo: String, val ts: Long)
+
+    /** Conversación completa, al abrirla desde el historial. */
+    data class ConversacionGuardada(
+        val mensajes: MutableList<Mensaje>,
+        val historial: JSONArray,
+        val leccion: String?
+    )
+
+    private fun prefs(ctx: Context) =
+        ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)
+
+    private fun leerArray(ctx: Context, clave: String): JSONArray {
+        val v = prefs(ctx).getString(clave, null) ?: return JSONArray()
+        return try { JSONArray(v) } catch (e: Exception) { JSONArray() }
+    }
+
+    /** Id de la conversación en curso; si no hay ninguna, crea una. */
+    fun idConversacionActual(ctx: Context): String {
+        val p = prefs(ctx)
+        var id = p.getString(CLAVE_CONV_ACTUAL, null)
+        if (id.isNullOrBlank()) {
+            id = "c" + System.currentTimeMillis()
+            p.edit().putString(CLAVE_CONV_ACTUAL, id).apply()
+        }
+        return id
+    }
+
+    /** Arranca una conversación nueva y vacía (rota el id y limpia los slots en curso). */
+    fun nuevaConversacion(ctx: Context) {
+        prefs(ctx).edit()
+            .putString(CLAVE_CONV_ACTUAL, "c" + System.currentTimeMillis())
+            .remove(CLAVE_HISTORIAL_GRADIO)
+            .remove(CLAVE_MENSAJES_UI)
+            .remove(CLAVE_ULTIMA_LECCION)
+            .apply()
+    }
+
+    /** Lista de conversaciones guardadas, la más reciente primero. */
+    fun listarConversaciones(ctx: Context): List<ResumenConversacion> {
+        val arr = leerArray(ctx, CLAVE_CONVERSACIONES)
+        val out = mutableListOf<ResumenConversacion>()
+        for (i in 0 until arr.length()) {
+            val o = arr.optJSONObject(i) ?: continue
+            out.add(ResumenConversacion(o.optString("id"), o.optString("titulo"), o.optLong("ts")))
+        }
+        out.sortByDescending { it.ts }
+        return out
+    }
+
+    /**
+     * Guarda (o actualiza) la conversación en curso dentro de la lista del
+     * historial, con su id actual. El título es el primer mensaje del usuario.
+     * No archiva conversaciones vacías.
+     */
+    fun archivarConversacionActual(
+        ctx: Context,
+        mensajes: List<Mensaje>,
+        historial: JSONArray,
+        leccion: String?
+    ) {
+        if (mensajes.isEmpty()) return
+        val id = idConversacionActual(ctx)
+        val titulo = (mensajes.firstOrNull { it.esUsuario }?.texto ?: "Conversación")
+            .replace("\n", " ").trim().take(48).ifBlank { "Conversación" }
+        val mensajesArr = JSONArray()
+        for (m in mensajes) {
+            mensajesArr.put(JSONObject().put("texto", m.texto).put("esUsuario", m.esUsuario))
+        }
+        val obj = JSONObject()
+            .put("id", id)
+            .put("titulo", titulo)
+            .put("ts", System.currentTimeMillis())
+            .put("mensajes", mensajesArr)
+            .put("historial", historial.toString())
+            .put("leccion", leccion ?: "")
+
+        val arr = leerArray(ctx, CLAVE_CONVERSACIONES)
+        var reemplazado = false
+        for (i in 0 until arr.length()) {
+            if (arr.optJSONObject(i)?.optString("id") == id) {
+                arr.put(i, obj); reemplazado = true; break
+            }
+        }
+        if (!reemplazado) arr.put(obj)
+        prefs(ctx).edit().putString(CLAVE_CONVERSACIONES, arr.toString()).apply()
+    }
+
+    /** Abre una conversación guardada: la vuelca a los slots "en curso" y la deja como actual. */
+    fun abrirConversacion(ctx: Context, id: String): ConversacionGuardada? {
+        val arr = leerArray(ctx, CLAVE_CONVERSACIONES)
+        for (i in 0 until arr.length()) {
+            val o = arr.optJSONObject(i) ?: continue
+            if (o.optString("id") != id) continue
+            val ma = o.optJSONArray("mensajes") ?: JSONArray()
+            val msgs = mutableListOf<Mensaje>()
+            for (j in 0 until ma.length()) {
+                val mo = ma.optJSONObject(j) ?: continue
+                msgs.add(Mensaje(mo.optString("texto"), mo.optBoolean("esUsuario")))
+            }
+            val hist = try { JSONArray(o.optString("historial", "[]")) } catch (e: Exception) { JSONArray() }
+            val lec = o.optString("leccion", "").ifBlank { null }
+            prefs(ctx).edit()
+                .putString(CLAVE_CONV_ACTUAL, id)
+                .putString(CLAVE_MENSAJES_UI, ma.toString())
+                .putString(CLAVE_HISTORIAL_GRADIO, hist.toString())
+                .putString(CLAVE_ULTIMA_LECCION, lec)
+                .apply()
+            return ConversacionGuardada(msgs, hist, lec)
+        }
+        return null
+    }
+
+    /** Borra una conversación del historial. */
+    fun borrarConversacion(ctx: Context, id: String) {
+        val arr = leerArray(ctx, CLAVE_CONVERSACIONES)
+        val nuevo = JSONArray()
+        for (i in 0 until arr.length()) {
+            val o = arr.optJSONObject(i) ?: continue
+            if (o.optString("id") != id) nuevo.put(o)
+        }
+        prefs(ctx).edit().putString(CLAVE_CONVERSACIONES, nuevo.toString()).apply()
+    }
 }
