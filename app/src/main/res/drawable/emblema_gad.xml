@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Emblema de Gad: tropa vencedora, escudo y lanza. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <path
+        android:pathData="M20,14 L44,14 L44,34 Q32,54 20,34 Z M32,6 L32,58 M27,10 L37,10"
+        android:strokeColor="@color/teshua_oro_viejo"
+        android:strokeWidth="2"
+        android:fillColor="#00000000" />
+</vector>

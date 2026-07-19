@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Emblema de Benjamín: lobo arrebatador. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <path
+        android:pathData="M18,46 C16,40 16,32 22,28 C20,24 22,18 28,18 C30,14 38,14 40,19 C46,20 48,27 44,32 C48,36 46,44 40,46 C38,50 22,50 18,46 Z M26,18 L24,10 L30,17 Z M38,19 L42,11 L40,20 Z"
+        android:strokeColor="@color/teshua_oro_viejo"
+        android:strokeWidth="2"
+        android:fillColor="#00000000" />
+</vector>

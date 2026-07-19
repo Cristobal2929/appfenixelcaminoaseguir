@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Emblema de Neftalí: cierva suelta, palabras hermosas. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <path
+        android:pathData="M14,40 Q20,30 30,32 Q34,20 44,18 M44,18 L48,12 M44,18 L50,20 M30,32 Q40,34 46,44 M18,40 L12,52 M26,36 L20,50 M36,34 L40,48 M44,38 L50,50"
+        android:strokeColor="@color/teshua_oro_viejo"
+        android:strokeWidth="2"
+        android:fillColor="#00000000" />
+</vector>

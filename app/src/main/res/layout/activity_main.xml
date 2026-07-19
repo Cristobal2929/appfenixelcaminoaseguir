@@ -9,9 +9,15 @@
     Fénix", que abre ChatActivity (texto + voz, nativo, sin mostrar nunca
     el Space). El Space sigue siendo el cerebro detrás de cámaras, pero
     nadie lo ve ni lo abre.
+
+    El emblema ya no es siempre la espiral genérica: MainActivity lo
+    sustituye por el sello de la tribu de la persona (emblema_<id>, ver
+    Tribu.kt) en cuanto hay una casa revelada en Prefs, junto con su nombre
+    y un consejo propio de esa tribu para el día a día.
 -->
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -43,8 +49,9 @@
             android:background="@drawable/bg_emblema_home">
 
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:id="@+id/ivEmblemaTribu"
+                android:layout_width="68dp"
+                android:layout_height="68dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_teshua_spiral"
                 android:contentDescription="@string/app_name"/>
@@ -70,9 +77,23 @@
             android:gravity="center"/>
 
         <TextView
+            android:id="@+id/tvNombreTribuHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:textColor="@color/teshua_dorado"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.04"
+            android:gravity="center"
+            android:visibility="gone"
+            tools:text="Casa de Judá"/>
+
+        <TextView
+            android:id="@+id/tvBienvenidaHome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="34dp"
+            android:layout_marginTop="18dp"
             android:text="@string/home_bienvenida"
             android:textColor="@color/teshua_texto"
             android:textSize="15sp"

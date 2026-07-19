@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         val emblema = findViewById<android.view.View>(R.id.emblema)
         respirarEmblema(emblema)
+        aplicarTribuDeLaPersona()
 
         findViewById<android.widget.Button>(R.id.btnHablarFenix).setOnClickListener {
             abrirChat()
@@ -84,6 +85,38 @@ class MainActivity : AppCompatActivity() {
         startService(Intent(this, FloatingBubbleService::class.java))
         Toast.makeText(this, "Fénix ya flota. Tócalo para hablarle desde cualquier app.", Toast.LENGTH_SHORT).show()
         moveTaskToBack(true)
+    }
+
+    /**
+     * Sustituye la espiral genérica por el sello de la tribu que el Portal
+     * ya reveló para esta persona (guardada en Prefs), y muestra su nombre
+     * y un consejo propio de esa casa para el día de hoy.
+     *
+     * Si por lo que sea aún no hay casa guardada (no debería pasar, porque
+     * SplashActivity manda al Portal antes de llegar aquí), se deja tal
+     * cual está en el XML: la espiral y el texto de bienvenida genéricos.
+     */
+    private fun aplicarTribuDeLaPersona() {
+        val numeroCasa = Prefs.leerCasaNumero(this) ?: return
+        val tribu = Tribus.porNumero(numeroCasa) ?: return
+
+        val idEmblema = resources.getIdentifier(tribu.emblemaResName, "drawable", packageName)
+        if (idEmblema != 0) {
+            findViewById<android.widget.ImageView>(R.id.ivEmblemaTribu).setImageResource(idEmblema)
+        }
+
+        findViewById<android.widget.TextView>(R.id.tvNombreTribuHome).apply {
+            text = getString(R.string.home_casa_de, tribu.nombre)
+            setTextColor(colorDe(tribu.colorResName))
+            visibility = android.view.View.VISIBLE
+        }
+
+        findViewById<android.widget.TextView>(R.id.tvBienvenidaHome).text = tribu.consejo
+    }
+
+    private fun colorDe(resName: String): Int {
+        val id = resources.getIdentifier(resName, "color", packageName)
+        return if (id != 0) getColor(id) else getColor(R.color.teshua_dorado)
     }
 
     /** Respiración sutil y continua del emblema: nunca es un WebView, pero tampoco está muerto. */
