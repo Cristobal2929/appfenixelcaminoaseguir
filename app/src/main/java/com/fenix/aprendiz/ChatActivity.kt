@@ -2,8 +2,10 @@ package com.fenix.aprendiz
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.net.Uri
@@ -65,6 +67,33 @@ class ChatActivity : AppCompatActivity() {
 
     private val historialGradio = JSONArray()
     private var mediaPlayer: MediaPlayer? = null
+    private var hebrewRain: HebrewRainView? = null
+
+    /** Escucha el resultado que manda ChatEnvioService, esté la app en 1º o 2º plano. */
+    private val receptorResultado = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent ?: return
+            progress.visibility = View.GONE
+            val ok = intent.getBooleanExtra(ChatEnvioService.EXTRA_OK, false)
+            if (ok) {
+                val respuesta = intent.getStringExtra(ChatEnvioService.EXTRA_RESPUESTA) ?: return
+                val categoria = intent.getStringExtra(ChatEnvioService.EXTRA_CATEGORIA)
+                val audioUrl = intent.getStringExtra(ChatEnvioService.EXTRA_AUDIO_URL)
+                // Evita duplicar la burbuja si ya se pintó (no debería pasar, pero por seguridad).
+                if (adapter.obtenerTodos().lastOrNull()?.texto != respuesta) {
+                    adapter.agregar(Mensaje(respuesta, esUsuario = false))
+                    rv.scrollToPosition(adapter.itemCount - 1)
+                }
+                sincronizarHistorial(Prefs.leerHistorialGradio(this@ChatActivity))
+                actualizarSubtitulo(categoria)
+                vibrarRespuesta()
+                if (audioUrl != null) reproducirAudio(audioUrl)
+            } else {
+                val error = intent.getStringExtra(ChatEnvioService.EXTRA_ERROR)
+                Toast.makeText(this@ChatActivity, "Orígenes no responde: $error", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 
     private val pedirPermisoMic = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -96,6 +125,7 @@ class ChatActivity : AppCompatActivity() {
         estadoClave = findViewById(R.id.estadoClave)
         btnMic = findViewById(R.id.btnMic)
         tvSubtitulo = findViewById(R.id.tvSubtitulo)
+        hebrewRain = findViewById(R.id.hebrewRain)
 
         // Carga lo que ya estaba guardado en este dispositivo (si lo hay).
         adapter = ChatAdapter(Prefs.leerMensajesUI(this))
@@ -166,6 +196,38 @@ class ChatActivity : AppCompatActivity() {
 
         if (intent.getBooleanExtra(EXTRA_ABRIR_AJUSTES, false)) {
             panelAjustes.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        ChatEnvioService.chatVisible = true
+        val filtro = IntentFilter(ChatEnvioService.ACTION_RESULTADO)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(receptorResultado, filtro, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            @Suppress("UnspecifiedRegisterReceiverFlag")
+            registerReceiver(receptorResultado, filtro)
+        }
+        // Por si la respuesta llegó (y se guardó en Prefs) mientras el chat
+        // no estaba visible o la Activity fue recreada por Android.
+        refrescarDesdeGuardado()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        ChatEnvioService.chatVisible = false
+        runCatching { unregisterReceiver(receptorResultado) }
+    }
+
+    /** Vuelve a pintar desde Prefs si hay mensajes más nuevos que los que tiene el adapter en memoria. */
+    private fun refrescarDesdeGuardado() {
+        val guardados = Prefs.leerMensajesUI(this)
+        if (guardados.size > adapter.itemCount) {
+            adapter.cargarGuardados(guardados)
+            sincronizarHistorial(Prefs.leerHistorialGradio(this))
+            actualizarSubtitulo(Prefs.leerUltimaLeccion(this))
+            if (adapter.itemCount > 0) rv.scrollToPosition(adapter.itemCount - 1)
         }
     }
 
@@ -316,37 +378,23 @@ class ChatActivity : AppCompatActivity() {
 
         val clave = Prefs.leerClaveCerebras(this)
         val nombreJardin = Prefs.leerNombreJardin(this)
-        FenixApiClient.enviarMensaje(
-            mensaje = texto,
-            historialGradio = historialGradio,
-            claveUsuario = clave,
-            nombreJardin = nombreJardin,
-            onResultado = { respuesta, historialActualizado, audioUrl, categoria ->
-                runOnUiThread {
-                    progress.visibility = View.GONE
-                    adapter.agregar(Mensaje(respuesta, esUsuario = false))
-                    rv.scrollToPosition(adapter.itemCount - 1)
-                    sincronizarHistorial(historialActualizado)
-                    actualizarSubtitulo(categoria)
-                    vibrarRespuesta()
 
-                    // Guarda tras cada mensaje: historial Gradio, burbujas UI y lección detectada.
-                    Prefs.guardarHistorialGradio(this, historialGradio)
-                    Prefs.guardarMensajesUI(this, adapter.obtenerTodos())
-                    Prefs.guardarUltimaLeccion(this, categoria)
-                    // Refleja también la conversación activa en el historial lateral.
-                    Prefs.archivarConversacionActual(this, adapter.obtenerTodos(), historialGradio, categoria)
-
-                    if (audioUrl != null) reproducirAudio(audioUrl)
-                }
-            },
-            onError = { error ->
-                runOnUiThread {
-                    progress.visibility = View.GONE
-                    Toast.makeText(this, "Fénix no responde: $error", Toast.LENGTH_LONG).show()
-                }
-            }
-        )
+        // El envío corre en ChatEnvioService (foreground service): así, si la
+        // persona sale de la app mientras Orígenes "está escribiendo", la
+        // petición sigue viva en 2º plano en vez de colgarse o perderse.
+        // El resultado llega por broadcast (receptorResultado) y también se
+        // persiste directo en Prefs desde el propio servicio.
+        val intent = Intent(this, ChatEnvioService::class.java).apply {
+            putExtra(ChatEnvioService.EXTRA_MENSAJE, texto)
+            putExtra(ChatEnvioService.EXTRA_HISTORIAL_GRADIO, historialGradio.toString())
+            putExtra(ChatEnvioService.EXTRA_CLAVE_USUARIO, clave)
+            putExtra(ChatEnvioService.EXTRA_NOMBRE_JARDIN, nombreJardin)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
+        }
     }
 
     /** Vibración corta al llegar la respuesta de Fénix (avisa aunque no se esté mirando la pantalla). */

@@ -2,22 +2,24 @@
 <resources>
     <string name="app_name">Teshuá</string>
 
-    <string name="home_bienvenida">Dile tu nombre a Fénix y cuéntale que quieres empezar el Camino de la Teshuá. Él te irá guiando, lección a lección, a través de las 100 lecciones del retorno del alma.</string>
+    <string name="home_bienvenida">Dile tu nombre a Orígenes de Luz, Portador del Fuego de Teshuá, y cuéntale que quieres empezar el Camino de la Teshuá. Él te irá guiando, lección a lección, a través de las 100 lecciones del retorno del alma.</string>
     <string name="home_casa_de">Casa de %1$s</string>
-    <string name="home_boton_hablar">Hablar con Fénix</string>
+    <string name="home_boton_hablar">Hablar con Orígenes</string>
     <string name="home_ajustes">Ajustes</string>
-    <string name="home_burbuja">Activar Fénix flotante 🔮</string>
+    <string name="home_burbuja">Activar Orígenes flotante 🔮</string>
     <string name="home_jardin">Entrar al Jardín 🌿</string>
 
     <string name="chat_titulo">Teshuá</string>
-    <string name="chat_subtitulo">Fénix en vivo</string>
+    <string name="chat_subtitulo">Orígenes en vivo</string>
+    <string name="chat_escribiendo">Orígenes está escribiendo…</string>
+    <string name="chat_nombre_completo">Orígenes de Luz, Portador del Fuego de Teshuá</string>
     <string name="chat_hint">Escribe tu mensaje…</string>
     <string name="chat_enviar">Enviar</string>
-    <string name="chat_mic_desc">Hablar con Fénix</string>
+    <string name="chat_mic_desc">Hablar con Orígenes</string>
     <string name="chat_cerrar_desc">Volver</string>
     <string name="chat_reiniciar_desc">Reiniciar conversación</string>
     <string name="chat_reiniciar_confirmar_titulo">¿Reiniciar conversación?</string>
-    <string name="chat_reiniciar_confirmar_mensaje">Se borrará todo el historial de este chat en este dispositivo. Fénix no recordará lo hablado hasta ahora.</string>
+    <string name="chat_reiniciar_confirmar_mensaje">Se borrará todo el historial de este chat en este dispositivo. Orígenes no recordará lo hablado hasta ahora.</string>
     <string name="chat_reiniciar_confirmar_boton">Reiniciar</string>
     <string name="chat_reiniciar_cancelar_boton">Cancelar</string>
     <string name="chat_reiniciar_hecho">Conversación reiniciada.</string>
@@ -63,7 +65,7 @@
     <string name="altar_volver">← Volver al Jardín</string>
 
     <string name="rio_titulo">Río de Conversación</string>
-    <string name="rio_subtitulo">Habla con Fénix. Tus palabras se unen al río compartido.</string>
+    <string name="rio_subtitulo">Habla con Orígenes. Tus palabras se unen al río compartido.</string>
     <string name="rio_hint">Escribe tu mensaje…</string>
     <string name="rio_boton_enviar">Enviar</string>
     <string name="rio_error_vacio">Escribe algo antes de enviar.</string>
@@ -76,7 +78,7 @@
     <string name="ajustes_clave_hint">csk-…</string>
     <string name="ajustes_guardar">Guardar clave</string>
     <string name="ajustes_olvidar">Olvidar clave</string>
-    <string name="ajustes_explicacion">Si pones tu propia clave de Cerebras, tus conversaciones usan tu cuota — no la del Space. La clave se guarda solo en este dispositivo, nunca se sube a ningún servidor nuestro. Si la dejas vacía, usarás el pool compartido de Fénix.</string>
+    <string name="ajustes_explicacion">Si pones tu propia clave de Cerebras, tus conversaciones usan tu cuota — no la del Space. La clave se guarda solo en este dispositivo, nunca se sube a ningún servidor nuestro. Si la dejas vacía, usarás el pool compartido de Orígenes.</string>
     <string name="ajustes_enlace">Conseguir mi clave gratis en cloud.cerebras.ai</string>
     <string name="ajustes_estado_propia">Usando tu clave personal.</string>
     <string name="ajustes_estado_pool">Usando el pool compartido del Space.</string>
@@ -125,9 +127,17 @@ Bienvenida a casa.</string>
     <string name="chat_historial_desc">Historial de conversaciones</string>
     <string name="chat_historial_titulo">Tus conversaciones</string>
     <string name="chat_nueva_conversacion">＋  Nueva conversación</string>
-    <string name="chat_historial_vacio">Aún no tienes conversaciones guardadas. Empieza a hablar con Fénix y aparecerán aquí.</string>
+    <string name="chat_historial_vacio">Aún no tienes conversaciones guardadas. Empieza a hablar con Orígenes y aparecerán aquí.</string>
     <string name="chat_conv_borrar_titulo">¿Borrar esta conversación?</string>
     <string name="chat_conv_borrar_mensaje">Se quitará del historial de este dispositivo. No se puede deshacer.</string>
     <string name="chat_conv_borrar_boton">Borrar</string>
     <string name="chat_conv_cancelar">Cancelar</string>
+
+    <!-- Notificaciones -->
+    <string name="notif_canal_mensajes">Mensajes de Orígenes</string>
+    <string name="notif_canal_mensajes_desc">Avisa cuando Orígenes responde estando la app en segundo plano.</string>
+    <string name="notif_canal_circulo">Círculo de Historias</string>
+    <string name="notif_canal_circulo_desc">Avisa cuando alguien comparte una historia nueva en el Círculo.</string>
+    <string name="notif_respuesta_titulo">Orígenes te respondió</string>
+    <string name="notif_circulo_titulo">Nueva historia en el Círculo</string>
 </resources>

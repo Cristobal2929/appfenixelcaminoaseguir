@@ -1,14 +1,18 @@
 package com.fenix.aprendiz
 
+import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 
 /**
  * Fénix Aprendiz / Teshuá — pantalla de inicio.
@@ -29,9 +33,16 @@ import androidx.appcompat.app.AppCompatActivity
  */
 class MainActivity : AppCompatActivity() {
 
+    private val pedirPermisoNotificaciones = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* si lo niega, simplemente no habrá sonido/ícono en 2º plano */ }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        NotificationHelper.crearCanales(this)
+        pedirPermisoNotificacionesSiHaceFalta()
 
         val emblema = findViewById<android.view.View>(R.id.emblema)
         respirarEmblema(emblema)
@@ -55,6 +66,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun pedirPermisoNotificacionesSiHaceFalta() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val concedido = ContextCompat.checkSelfPermission(
+                this, Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+            if (!concedido) pedirPermisoNotificaciones.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
+
     private fun abrirChat(irDirectoAAjustes: Boolean = false) {
         val intent = Intent(this, ChatActivity::class.java)
         if (irDirectoAAjustes) intent.putExtra(ChatActivity.EXTRA_ABRIR_AJUSTES, true)
@@ -71,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
             Toast.makeText(
                 this,
-                "Activa \"Permitir sobre otras apps\" para Fénix y vuelve a tocar el botón.",
+                "Activa \"Permitir sobre otras apps\" para Orígenes y vuelve a tocar el botón.",
                 Toast.LENGTH_LONG
             ).show()
             val intent = Intent(
@@ -83,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         startService(Intent(this, FloatingBubbleService::class.java))
-        Toast.makeText(this, "Fénix ya flota. Tócalo para hablarle desde cualquier app.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Orígenes ya flota. Tócalo para hablarle desde cualquier app.", Toast.LENGTH_SHORT).show()
         moveTaskToBack(true)
     }
 

@@ -35,6 +35,13 @@ class RevelacionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_revelacion)
 
+        // Esta pantalla se ve la primera vez que se asigna la casa (viene del
+        // Portal) y también, de rebote, si alguna vez se vuelve a abrir con
+        // los extras de intent. Solo suena la melodía en la asignación real.
+        if (intent.hasExtra(EXTRA_NUMERO)) {
+            NotificationHelper.tocarMelodiaBienvenida()
+        }
+
         val numeroCasa = intent.getIntExtra(EXTRA_NUMERO, Prefs.leerCasaNumero(this) ?: 1)
         val codigo = intent.getIntExtra(EXTRA_CODIGO, numeroCasa)
         val sexo = intent.getStringExtra(EXTRA_SEXO) ?: Prefs.leerSexoCasa(this)

@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
 
     <application
         android:allowBackup="true"
@@ -84,6 +87,11 @@
         <service
             android:name=".FloatingBubbleService"
             android:exported="false"/>
+
+        <service
+            android:name=".ChatEnvioService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync"/>
 
     </application>
 </manifest>

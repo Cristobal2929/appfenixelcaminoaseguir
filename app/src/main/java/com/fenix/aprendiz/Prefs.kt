@@ -25,6 +25,17 @@ object Prefs {
     private const val CLAVE_JARDIN_NOMBRE = "jardin_nombre"
     private const val CLAVE_CASA_NUMERO = "casa_numero"
     private const val CLAVE_CASA_SEXO = "casa_sexo"
+    private const val CLAVE_ULTIMA_MARCA_CIRCULO = "ultima_marca_circulo"
+
+    /** Marca (fecha/autor+texto) de la última historia del Círculo ya vista, para notificar solo las nuevas. */
+    fun guardarUltimaMarcaCirculo(ctx: Context, marca: String) {
+        ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)
+            .edit().putString(CLAVE_ULTIMA_MARCA_CIRCULO, marca).apply()
+    }
+
+    fun leerUltimaMarcaCirculo(ctx: Context): String? =
+        ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)
+            .getString(CLAVE_ULTIMA_MARCA_CIRCULO, null)
 
     fun guardarClaveCerebras(ctx: Context, clave: String) {
         ctx.getSharedPreferences(FICHERO, Context.MODE_PRIVATE)

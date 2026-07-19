@@ -89,6 +89,7 @@ class CirculoActivity : AppCompatActivity() {
         CirculoApiClient.listar(
             onResultado = { historias ->
                 runOnUiThread {
+                    notificarSiHayHistoriaNueva(historias)
                     listaHistorias.removeAllViews()
                     if (historias.isEmpty()) {
                         listaHistorias.addView(crearItem(getString(R.string.circulo_sin_historias), esVacio = true))
@@ -104,6 +105,22 @@ class CirculoActivity : AppCompatActivity() {
                 // su historia se compartió o no.
             }
         )
+    }
+
+    /**
+     * Compara con la última historia vista (guardada en Prefs) y, si hay
+     * una nueva de OTRA persona, avisa con notificación (ícono + sonido).
+     * No avisa la primera vez que se abre el Círculo en el dispositivo
+     * (para no bombardear con todo el histórico de golpe).
+     */
+    private fun notificarSiHayHistoriaNueva(historias: List<CirculoApiClient.Historia>) {
+        val masReciente = historias.firstOrNull() ?: return
+        val marca = masReciente.creadaEn.ifBlank { masReciente.autor + "|" + masReciente.texto }
+        val anterior = Prefs.leerUltimaMarcaCirculo(this)
+        Prefs.guardarUltimaMarcaCirculo(this, marca)
+        if (anterior != null && anterior != marca && masReciente.autor != nombre) {
+            NotificationHelper.notificarHistoriaCirculo(this, masReciente.autor, masReciente.texto)
+        }
     }
 
     /** Una historia = autor en dorado + texto debajo, con separación. */
