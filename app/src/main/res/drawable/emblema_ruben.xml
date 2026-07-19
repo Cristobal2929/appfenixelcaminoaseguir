@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Emblema de Rubén: aguas impetuosas. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <path
+        android:pathData="M10,22 Q16,16 22,22 Q28,28 34,22 Q40,16 46,22 Q52,28 54,22 M10,33 Q16,27 22,33 Q28,39 34,33 Q40,27 46,33 Q52,39 54,33 M10,44 Q16,38 22,44 Q28,50 34,44 Q40,38 46,44 Q52,50 54,44"
+        android:strokeColor="@color/teshua_oro_viejo"
+        android:strokeWidth="2"
+        android:fillColor="#00000000" />
+</vector>

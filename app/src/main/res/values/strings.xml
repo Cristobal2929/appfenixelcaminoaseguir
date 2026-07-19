@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Teshuá</string>
+
+    <string name="home_bienvenida">Dile tu nombre a Fénix y cuéntale que quieres empezar el Camino de la Teshuá. Él te irá guiando, lección a lección, a través de las 100 lecciones del retorno del alma.</string>
+    <string name="home_casa_de">Casa de %1$s</string>
+    <string name="home_boton_hablar">Hablar con Fénix</string>
+    <string name="home_ajustes">Ajustes</string>
+    <string name="home_burbuja">Activar Fénix flotante 🔮</string>
+    <string name="home_jardin">Entrar al Jardín 🌿</string>
+
+    <string name="chat_titulo">Teshuá</string>
+    <string name="chat_subtitulo">Fénix en vivo</string>
+    <string name="chat_hint">Escribe tu mensaje…</string>
+    <string name="chat_enviar">Enviar</string>
+    <string name="chat_mic_desc">Hablar con Fénix</string>
+    <string name="chat_cerrar_desc">Volver</string>
+    <string name="chat_reiniciar_desc">Reiniciar conversación</string>
+    <string name="chat_reiniciar_confirmar_titulo">¿Reiniciar conversación?</string>
+    <string name="chat_reiniciar_confirmar_mensaje">Se borrará todo el historial de este chat en este dispositivo. Fénix no recordará lo hablado hasta ahora.</string>
+    <string name="chat_reiniciar_confirmar_boton">Reiniciar</string>
+    <string name="chat_reiniciar_cancelar_boton">Cancelar</string>
+    <string name="chat_reiniciar_hecho">Conversación reiniciada.</string>
+    <string name="chat_subtitulo_leccion">Lección: %1$s</string>
+
+    <string name="jardin_titulo">El Jardín</string>
+    <string name="jardin_subtitulo">Escribe tu nombre y un PIN de 4 dígitos para entrar. Si es la primera vez, se crea tu lugar en el Jardín; si ya lo tenías, vuelves a él.</string>
+    <string name="jardin_hint_nombre">Tu nombre</string>
+    <string name="jardin_hint_pin">PIN de 4 dígitos</string>
+    <string name="jardin_ayuda_pin">Guarda bien tu PIN: solo lo necesitas de nuevo si cambias de celular.</string>
+    <string name="jardin_boton_entrar">Entrar al Jardín</string>
+    <string name="jardin_error_nombre_vacio">Escribe tu nombre.</string>
+    <string name="jardin_error_pin">El PIN debe tener exactamente 4 números.</string>
+    <string name="jardin_error_conexion">No se pudo conectar con el Jardín: %1$s</string>
+    <string name="jardin_boton_ir_templo">Entrar al Jardín 🌿</string>
+
+    <string name="jardin_hub_titulo">El Jardín</string>
+    <string name="jardin_hub_bienvenida">Bienvenido/a, %1$s</string>
+    <string name="jardin_boton_templo">🙏 Templo de Gratitud</string>
+    <string name="jardin_boton_altar">🕯️ Altar de la Luz</string>
+    <string name="jardin_boton_rio">💬 Río de Conversación</string>
+    <string name="jardin_boton_circulo">🌸 Círculo de Historias</string>
+    <string name="jardin_proximamente">Muy pronto florecerá 🌱</string>
+
+    <string name="templo_titulo">Templo de Gratitud</string>
+    <string name="templo_subtitulo">Cada día, deja aquí una gratitud antes de cerrar.</string>
+    <string name="templo_hint">Hoy agradezco…</string>
+    <string name="templo_boton_guardar">Guardar gratitud</string>
+    <string name="templo_historial_titulo">Tus gratitudes</string>
+    <string name="templo_error_vacio">Escribe algo antes de guardar.</string>
+    <string name="templo_error_conexion">No se pudo conectar con el Templo: %1$s</string>
+    <string name="templo_sin_gratitudes">Aún no has guardado ninguna gratitud.</string>
+    <string name="templo_volver">← Volver al Jardín</string>
+
+    <string name="altar_titulo">Altar de la Luz</string>
+    <string name="altar_subtitulo">Enciende una luz con una intención o plegaria.</string>
+    <string name="altar_hint">Enciendo esta luz por…</string>
+    <string name="altar_boton_encender">Encender luz</string>
+    <string name="altar_historial_titulo">Tus luces encendidas</string>
+    <string name="altar_error_vacio">Escribe una intención antes de encender la luz.</string>
+    <string name="altar_error_conexion">No se pudo conectar con el Altar: %1$s</string>
+    <string name="altar_sin_luces">Aún no has encendido ninguna luz.</string>
+    <string name="altar_volver">← Volver al Jardín</string>
+
+    <string name="rio_titulo">Río de Conversación</string>
+    <string name="rio_subtitulo">Habla con Fénix. Tus palabras se unen al río compartido.</string>
+    <string name="rio_hint">Escribe tu mensaje…</string>
+    <string name="rio_boton_enviar">Enviar</string>
+    <string name="rio_error_vacio">Escribe algo antes de enviar.</string>
+    <string name="rio_error_conexion">No se pudo conectar con el Río: %1$s</string>
+    <string name="rio_sin_mensajes">Aún no hay conversaciones en el río.</string>
+    <string name="rio_volver">← Volver al Jardín</string>
+
+    <string name="ajustes_titulo">Ajustes</string>
+    <string name="ajustes_clave_label">Tu clave personal de Cerebras</string>
+    <string name="ajustes_clave_hint">csk-…</string>
+    <string name="ajustes_guardar">Guardar clave</string>
+    <string name="ajustes_olvidar">Olvidar clave</string>
+    <string name="ajustes_explicacion">Si pones tu propia clave de Cerebras, tus conversaciones usan tu cuota — no la del Space. La clave se guarda solo en este dispositivo, nunca se sube a ningún servidor nuestro. Si la dejas vacía, usarás el pool compartido de Fénix.</string>
+    <string name="ajustes_enlace">Conseguir mi clave gratis en cloud.cerebras.ai</string>
+    <string name="ajustes_estado_propia">Usando tu clave personal.</string>
+    <string name="ajustes_estado_pool">Usando el pool compartido del Space.</string>
+
+    <string name="splash_subtitulo">El retorno del alma a la fuente divina</string>
+
+    <!-- Circulo de Historias -->
+    <string name="circulo_titulo">Círculo de Historias</string>
+    <string name="circulo_subtitulo">Comparte tu experiencia. Aquí florecen juntas las historias de todos.</string>
+    <string name="circulo_hint">Mi historia de hoy…</string>
+    <string name="circulo_boton_compartir">Compartir en el Círculo</string>
+    <string name="circulo_historial_titulo">Historias del Círculo</string>
+    <string name="circulo_error_vacio">Escribe tu historia antes de compartirla.</string>
+    <string name="circulo_error_conexion">No se pudo conectar con el Círculo: %1$s</string>
+    <string name="circulo_sin_historias">Aún no hay historias. Sé el primero en sembrar una. 🌱</string>
+    <string name="circulo_volver">← Volver al Jardín</string>
+
+    <!-- ===== Portal de Teshuá (descifrar el alma → casa) ===== -->
+    <string name="portal_titulo">El Portal</string>
+    <string name="portal_intro">Separado de Mí has estado, pero nunca lo estuviste.
+
+Descifra tu destino. Tu nombre, tus apellidos y tu fecha de nacimiento son la llave que lo abre todo.
+
+Pon tu llave aquí abajo.</string>
+    <string name="portal_hint_nombre">Tu nombre</string>
+    <string name="portal_hint_apellidos">Tus apellidos</string>
+    <string name="portal_fecha_label">Tu fecha de nacimiento</string>
+    <string name="portal_fecha_pulsa">Pulsa para elegir tu fecha</string>
+    <string name="portal_sexo_label">¿Hijo o hija de la casa?</string>
+    <string name="portal_sexo_h">Hijo</string>
+    <string name="portal_sexo_m">Hija</string>
+    <string name="portal_boton_descifrar">Descifrar mi destino</string>
+    <string name="portal_error_incompleto">Completa tu nombre, tus apellidos y tu fecha de nacimiento.</string>
+
+    <!-- ===== Revelación de la casa ===== -->
+    <string name="rev_titulo">Las Doce Casas de Israel</string>
+    <string name="rev_esta_es_h">Esta es tu casa, amado hijo.
+Bienvenido a casa.</string>
+    <string name="rev_esta_es_m">Esta es tu casa, amada hija.
+Bienvenida a casa.</string>
+    <string name="rev_codigo_label">Número de tu alma</string>
+    <string name="rev_video_creando">Tu vídeo se está creando…</string>
+    <string name="rev_boton_empezar">Empieza tu camino de la Teshuá — el retorno del alma</string>
+    <string name="rev_promesa">La gran promesa del Padre al hombre y a la casa de Israel</string>
+    <string name="rev_versiculo">«En Tu luz veremos la luz» — Salmos 36:9</string>
+    <string name="chat_historial_desc">Historial de conversaciones</string>
+    <string name="chat_historial_titulo">Tus conversaciones</string>
+    <string name="chat_nueva_conversacion">＋  Nueva conversación</string>
+    <string name="chat_historial_vacio">Aún no tienes conversaciones guardadas. Empieza a hablar con Fénix y aparecerán aquí.</string>
+    <string name="chat_conv_borrar_titulo">¿Borrar esta conversación?</string>
+    <string name="chat_conv_borrar_mensaje">Se quitará del historial de este dispositivo. No se puede deshacer.</string>
+    <string name="chat_conv_borrar_boton">Borrar</string>
+    <string name="chat_conv_cancelar">Cancelar</string>
+</resources>

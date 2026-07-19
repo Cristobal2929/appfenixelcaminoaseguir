@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Tema "Campamento" — pantalla completa, sin barra de acción.
+         El diseño patriarcal es intencionalmente nocturno (fuego de
+         campamento contra el desierto), así que el tema base YA es
+         la versión "noche"; no existe una variante clara/día. -->
+    <style name="Theme.FenixAprendiz" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/teshua_noche_campamento</item>
+        <item name="colorPrimary">@color/teshua_oro_viejo</item>
+        <item name="colorPrimaryDark">@color/teshua_noche_campamento</item>
+        <item name="colorAccent">@color/teshua_terracota</item>
+        <item name="android:textColorPrimary">@color/teshua_pergamino</item>
+        <item name="android:textColorSecondary">@color/teshua_texto_apagado</item>
+        <item name="android:statusBarColor">@color/teshua_noche_campamento</item>
+        <item name="android:navigationBarColor">@color/teshua_noche_campamento</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="fontFamily">@font/frank_ruhl_libre_regular</item>
+        <item name="android:fontFamily">@font/frank_ruhl_libre_regular</item>
+    </style>
+
+    <!-- Título grande de pantalla: trazo tallado/inscripción en piedra -->
+    <style name="Teshua.Titulo" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/cinzel_decorative_bold</item>
+        <item name="android:textColor">@color/teshua_oro_viejo</item>
+        <item name="android:letterSpacing">0.04</item>
+    </style>
+
+    <!-- Subtítulos y botones: mismo espíritu tallado pero más sobrio -->
+    <style name="Teshua.Subtitulo" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/cinzel_regular</item>
+        <item name="android:textColor">@color/teshua_pergamino</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <!-- Cuerpo de texto: legible, cálido, para lecciones largas -->
+    <style name="Teshua.Cuerpo" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/frank_ruhl_libre_regular</item>
+        <item name="android:textColor">@color/teshua_pergamino</item>
+    </style>
+</resources>

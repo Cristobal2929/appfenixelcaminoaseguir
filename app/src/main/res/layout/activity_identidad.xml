@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/teshua_fondo"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="28dp">
+
+        <Space android:layout_width="0dp" android:layout_height="48dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/jardin_titulo"
+            android:textColor="@color/teshua_dorado"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="28dp"
+            android:text="@string/jardin_subtitulo"
+            android:textColor="@color/teshua_texto_apagado"
+            android:textSize="14sp"
+            android:gravity="center"/>
+
+        <EditText
+            android:id="@+id/inputNombreJardin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/jardin_hint_nombre"
+            android:textColorHint="@color/teshua_texto_apagado"
+            android:textColor="@color/teshua_texto"
+            android:background="@color/teshua_fondo_panel"
+            android:padding="14dp"
+            android:inputType="textPersonName"
+            android:maxLines="1"/>
+
+        <EditText
+            android:id="@+id/inputPinJardin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="@string/jardin_hint_pin"
+            android:textColorHint="@color/teshua_texto_apagado"
+            android:textColor="@color/teshua_texto"
+            android:background="@color/teshua_fondo_panel"
+            android:padding="14dp"
+            android:inputType="numberPassword"
+            android:maxLength="4"
+            android:maxLines="1"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/jardin_ayuda_pin"
+            android:textColor="@color/teshua_texto_apagado"
+            android:textSize="12sp"/>
+
+        <Button
+            android:id="@+id/btnEntrarJardin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:text="@string/jardin_boton_entrar"
+            android:backgroundTint="@color/teshua_dorado"
+            android:textColor="@color/teshua_fondo"
+            android:textStyle="bold"/>
+
+        <ProgressBar
+            android:id="@+id/progressJardin"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/estadoJardin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/teshua_texto"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnIrTemplo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/jardin_boton_ir_templo"
+            android:backgroundTint="@color/teshua_burbuja_fenix"
+            android:textColor="@color/teshua_dorado_suave"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+</ScrollView>

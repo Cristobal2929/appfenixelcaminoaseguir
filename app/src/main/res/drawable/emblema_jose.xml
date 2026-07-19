@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Emblema de José: rama fructífera junto a manantial. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <path
+        android:pathData="M20,50 Q32,44 44,50 M32,44 L32,14 M32,20 L22,14 M32,26 L42,20 M32,32 L24,28 M32,38 L40,34"
+        android:strokeColor="@color/teshua_oro_viejo"
+        android:strokeWidth="2"
+        android:fillColor="#00000000" />
+</vector>

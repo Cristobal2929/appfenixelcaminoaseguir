@@ -1,0 +1,13 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/teshua_burbuja_usuario"/>
+    <stroke
+        android:width="1dp"
+        android:color="@color/teshua_dorado"/>
+    <corners android:radius="22dp"/>
+    <padding
+        android:left="16dp"
+        android:right="16dp"
+        android:top="4dp"
+        android:bottom="4dp"/>
+</shape>

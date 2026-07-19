@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawerChat"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- ===================== CONTENIDO PRINCIPAL ===================== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/teshua_fondo"
+        android:animateLayoutChanges="true">
+
+        <!-- Barra superior -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:elevation="4dp"
+            android:background="@color/teshua_fondo_panel">
+
+            <ImageButton
+                android:id="@+id/btnHistorial"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_menu"
+                android:padding="9dp"
+                android:contentDescription="@string/chat_historial_desc"/>
+
+            <ImageButton
+                android:id="@+id/btnCerrarChat"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_back"
+                android:padding="9dp"
+                android:contentDescription="@string/chat_cerrar_desc"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chat_titulo"
+                    android:textColor="@color/teshua_texto"
+                    android:textStyle="bold"
+                    android:textSize="17sp"/>
+
+                <TextView
+                    android:id="@+id/tvSubtitulo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chat_subtitulo"
+                    android:textColor="@color/teshua_texto_apagado"
+                    android:textSize="12sp"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btnReiniciar"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_restart"
+                android:padding="9dp"
+                android:contentDescription="@string/chat_reiniciar_desc"/>
+
+            <ImageButton
+                android:id="@+id/btnAjustes"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_settings"
+                android:padding="9dp"
+                android:contentDescription="@string/ajustes_titulo"/>
+        </LinearLayout>
+
+        <!-- Panel de ajustes (oculto por defecto) -->
+        <LinearLayout
+            android:id="@+id/panelAjustes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@color/teshua_fondo_panel"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ajustes_titulo"
+                android:textColor="@color/teshua_dorado"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/ajustes_explicacion"
+                android:textColor="@color/teshua_texto_apagado"
+                android:textSize="13sp"/>
+
+            <EditText
+                android:id="@+id/inputClaveCerebras"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="@string/ajustes_clave_hint"
+                android:inputType="textPassword"
+                android:textColor="@color/teshua_texto"
+                android:textColorHint="@color/teshua_texto_apagado"
+                android:backgroundTint="@color/teshua_dorado"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <Button
+                    android:id="@+id/btnGuardarClave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/ajustes_guardar"
+                    android:backgroundTint="@color/teshua_dorado"
+                    android:textColor="@color/black"/>
+
+                <Button
+                    android:id="@+id/btnOlvidarClave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/ajustes_olvidar"
+                    android:backgroundTint="@color/teshua_burbuja_usuario"
+                    android:textColor="@color/teshua_texto"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/linkCerebras"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/ajustes_enlace"
+                android:textColor="@color/teshua_rojizo"
+                android:textStyle="bold"
+                android:autoLink="web"/>
+
+            <TextView
+                android:id="@+id/estadoClave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/ajustes_estado_pool"
+                android:textColor="@color/teshua_texto_apagado"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+        <!-- Lista de mensajes -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvChat"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingHorizontal="10dp"
+            android:paddingTop="8dp"
+            android:clipToPadding="false"/>
+
+        <LinearLayout
+            android:id="@+id/progressChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="18dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="10dp"
+            android:background="@drawable/bg_burbuja_fenix"
+            android:visibility="gone">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyle"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:indeterminateTint="@color/teshua_dorado"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Fénix está escribiendo…"
+                android:textColor="@color/teshua_texto_apagado"
+                android:textSize="13sp"
+                android:fontFamily="sans-serif-light"/>
+        </LinearLayout>
+
+        <!-- Entrada de texto -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:background="@color/teshua_fondo_panel">
+
+            <EditText
+                android:id="@+id/inputMensaje"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_input_pill"
+                android:hint="@string/chat_hint"
+                android:textColor="@color/teshua_texto"
+                android:textColorHint="@color/teshua_texto_apagado"
+                android:maxLines="4"/>
+
+            <ImageButton
+                android:id="@+id/btnMic"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_mic"
+                android:padding="10dp"
+                android:contentDescription="@string/chat_mic_desc"/>
+
+            <ImageButton
+                android:id="@+id/btnEnviar"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/bg_btn_enviar"
+                android:src="@drawable/ic_send"
+                android:padding="11dp"
+                android:contentDescription="@string/chat_enviar"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ===================== CAJÓN IZQUIERDO: HISTORIAL ===================== -->
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical"
+        android:background="@color/teshua_fondo_panel"
+        android:elevation="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/chat_historial_titulo"
+            android:textColor="@color/teshua_dorado"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+        <Button
+            android:id="@+id/btnNuevaConversacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginBottom="6dp"
+            android:text="@string/chat_nueva_conversacion"
+            android:backgroundTint="@color/teshua_dorado"
+            android:textColor="@color/black"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHistorial"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/tvHistorialVacio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/chat_historial_vacio"
+            android:textColor="@color/teshua_texto_apagado"
+            android:textSize="13sp"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

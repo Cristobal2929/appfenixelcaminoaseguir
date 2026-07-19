@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Emblema de Simeón: espada. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <path
+        android:pathData="M32,6 L32,42 M18,38 L46,38 M32,42 L32,56"
+        android:strokeColor="@color/teshua_oro_viejo"
+        android:strokeWidth="2.5"
+        android:fillColor="#00000000" />
+</vector>

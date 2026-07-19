@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- ============================================================
+         PALETA "DESIERTO Y TABERNÁCULO" — identidad patriarcal/abrahámica
+         ============================================================ -->
+    <color name="teshua_noche_campamento">#14100C</color>
+    <color name="teshua_pergamino">#E8DCC4</color>
+    <color name="teshua_terracota">#B8623E</color>
+    <color name="teshua_bronce">#8C6A3F</color>
+    <color name="teshua_oro_viejo">#D4AF37</color>
+    <color name="teshua_tekhelet">#1E3A5F</color>
+    <color name="teshua_madera_olivo">#6B5A45</color>
+
+    <!-- ============================================================
+         Mapeo a los nombres YA USADOS en el código (no se tocan los
+         layouts/drawables — solo cambia el valor detrás de cada uno)
+         ============================================================ -->
+    <color name="teshua_fondo">#14100C</color>            <!-- noche de campamento -->
+    <color name="teshua_fondo_panel">#1F1811</color>       <!-- tienda: un tono sobre el fondo -->
+    <color name="teshua_dorado">#D4AF37</color>            <!-- oro viejo -->
+    <color name="teshua_dorado_suave">#E8DCC4</color>       <!-- pergamino/arena -->
+    <color name="teshua_rojizo">#B8623E</color>            <!-- terracota/arcilla -->
+    <color name="teshua_texto">#E8DCC4</color>             <!-- pergamino/arena -->
+    <color name="teshua_texto_apagado">#A6957A</color>      <!-- madera de olivo, aclarada para legibilidad -->
+    <color name="teshua_burbuja_usuario">#241B12</color>    <!-- bronce oscurecido -->
+    <color name="teshua_burbuja_fenix">#2A1810</color>      <!-- terracota oscurecida -->
+
+    <!-- ============================================================
+         Paleta de las 12 Tribus — SOLO para acentos personales
+         (estandarte del usuario), nunca como fondo/base de la UI
+         ============================================================ -->
+    <color name="tribu_ruben">#A33B2E</color>
+    <color name="tribu_simeon">#5C7A4F</color>
+    <color name="tribu_levi">#E8DCC4</color>
+    <color name="tribu_juda">#5B7A99</color>
+    <color name="tribu_isacar">#2E4A63</color>
+    <color name="tribu_zabulon">#E8DCC4</color>
+    <color name="tribu_dan">#3B5A73</color>
+    <color name="tribu_gad">#8C8578</color>
+    <color name="tribu_aser">#8C9A4F</color>
+    <color name="tribu_neftali">#6B5A45</color>
+    <color name="tribu_jose">#3A322A</color>
+    <color name="tribu_benjamin">#B8623E</color>
+</resources>

@@ -1,0 +1,62 @@
+========================================================================
+ FÉNIX APRENDIZ — LA APP  (léeme primero)
+========================================================================
+
+QUÉ ES ESTO
+-----------
+Una app Android que abre tu Space "Fénix Aprendiz" de Hugging Face.
+No lleva cerebro ni base de datos dentro: todo son llamadas al Space, y
+el Space responde (chat, voz de Teshuá con eco, memoria en Supabase).
+El usuario baja una app ligera; el cerebro se queda en tu lado.
+
+Como no puedes iterar si te quedas sin mensajes, la hice a prueba de
+fallos: es un WebView que muestra tu Space tal cual. Funciona a la
+primera y NO hay que tocar nada del Aprendiz.
+
+IMPORTANTE: la app necesita que tu Space esté ENCENDIDO. Si el Space
+está dormido, tardará unos segundos en despertar la primera vez.
+
+
+PASO A PASO EN TERMUX
+---------------------
+1) Crea un repo NUEVO y vacío en GitHub (desde github.com), por ejemplo:
+   nombre:  fenix-aprendiz-app
+   (sin README, sin .gitignore — vacío)
+
+2) En Termux:
+
+   cd ~
+   mkdir fenix-aprendiz-app && cd fenix-aprendiz-app
+   unzip -o ~/storage/downloads/fenix-aprendiz-app-v1.zip -d .
+   git init
+   git add -A
+   git commit -m "Fenix Aprendiz app (WebView)"
+   git branch -M main
+   git remote add origin https://github.com/Cristobal2929/fenix-aprendiz-app.git
+   git push -u origin main
+
+   (Si el unzip te dejó todo dentro de una subcarpeta, entra en ella
+    antes del git init. Comprueba con: ls  — tienes que ver "app",
+    "build.gradle", ".github", etc. en la carpeta actual.)
+
+3) El push arranca GitHub Actions. En un par de minutos tienes el APK
+   en la pestaña "Actions" del repo -> último workflow -> artifact
+   "app-debug". Lo bajas, lo instalas y listo.
+
+
+SI LA APP ABRE EN BLANCO
+------------------------
+Casi seguro es que la URL del Space no coincide. Abre:
+   app/src/main/java/com/fenix/aprendiz/MainActivity.kt
+y mira la línea:
+   private val URL_ESPACIO = "https://cristobal299-fenix-aprendiz.hf.space"
+Comprueba en el navegador cuál es la URL real de tu Space (botón de los
+tres puntos -> "Embed this Space" / "Direct URL") y pon esa. Vuelve a
+hacer commit y push.
+
+
+LA CARPETA "space-opcional"
+---------------------------
+Ahí está el endpoint del Space para una futura app NATIVA (chat propio
+en vez de mostrar la web). NO hace falta para esta app y NO conviene
+subirlo al Space ahora si no puedes probarlo. Es para más adelante.

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Emblema de Aser: gavilla de trigo, pan abundante. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <path
+        android:pathData="M32,10 L32,54 M32,44 L20,54 M32,44 L44,54 M32,34 L18,44 M32,34 L46,44 M32,24 L20,32 M32,24 L44,32 M22,40 L42,40"
+        android:strokeColor="@color/teshua_oro_viejo"
+        android:strokeWidth="2"
+        android:fillColor="#00000000" />
+</vector>
